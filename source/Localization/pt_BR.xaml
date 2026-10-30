@@ -801,166 +801,166 @@ Reclaimed {1}.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ExportDatabaseButton">Export CSV</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_FallbackIcons">Cover Images</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_FallbackIcons_Help">These images cover a locked or hidden icon until it is revealed. Drag in an image link or file, or browse for one; Clear restores the built-in image.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_ForceHashIndexRebuild">Rebuild File Scan Cache</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_HashIndexMaxAgeDays">File Scan Cache Max Age (days)</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_HiddenAchievements">Achievement Visibility</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_HiddenAchievements_Description">Choose which details a locked or hidden achievement gives away. Untick a box to cover that detail until you click the achievement to reveal it.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_HoursBetweenUpdates">Hours Between Refreshes:</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ClearAllDescription">Clear every cached icon file.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ClearLockedDescription">Clear only separate locked icons. The next refresh restores them.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_Description">Clear cached icon files. Missing icons are downloaded again on the next refresh.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_FileLabel_All">icon</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_FileLabel_Locked">locked icon</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressDeletingCount">Deleting cached {0} files... ({1}/{2})</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressNoFiles">No cached {0} files were found.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressNoLockedReferences">No cached locked icon references were found.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressScanning">Scanning cached {0} files...</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressScanningLockedReferences">Scanning cached locked icon references... ({0}/{1})</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Language">Language</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_LanguageHint">Language for achievement text when the platform supports it; otherwise English.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Maintenance_Title">Maintenance</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_OpenDataFolder">Open extension data folder (contains logs and cache)</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_OpenDataFolderButton">Open Folder</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_PixelsUnit">pixels (empty = unlimited)</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GridRowHeight">Row Height</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GridMaxRows">Max Rows</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GridColumnHeaderAlignment">Column Header Alignment</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GridCellAlignment">Cell Alignment</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GridCellVerticalAlignment">Cell Vertical Alignment</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GridAlignment_Center">Center</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_DateDisplayMode_DateAndTime">Date and time</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_DateDisplayMode_DateOnly">Date only</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_DateDisplayMode_Relative">Relative</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_LastPlayedDateDisplay">Last played format</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_UnlockDateDisplay">Unlock date format</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_PlaytimeDisplay">Playtime format</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_PlaytimeDisplayMode_HoursMinutes">Hours and minutes</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_PlaytimeDisplayMode_HoursOnly">Hours only</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_ProgressBadgeSource">Progress bar badges</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_ProgressBadgeSource_TrophyWhenAvailable">Trophy when available</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_ProgressBadgeSource_Help">Which badges show under the progress bar. Trophy when available uses a game's trophies where it has them and its rarity spread everywhere else; Rarity always shows the rarity spread.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_CategoryCompletionBadge">Category completion badge</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_CategoryCompletionBadgeMode_First">First</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ForceHashIndexRebuild">Reconstruir cache da análise de arquivos</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_HashIndexMaxAgeDays">Validade do cache de arquivos (dias)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_HiddenAchievements">Visibilidade das conquistas</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_HiddenAchievements_Description">Escolha quais detalhes de uma conquista bloqueada ou oculta podem ser revelados. Desmarque as opções que deseja esconder até clicar na conquista.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_HoursBetweenUpdates">Horas entre atualizações:</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ClearAllDescription">Limpar todos os arquivos de ícones em cache.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ClearLockedDescription">Limpar somente os ícones de bloqueio separados. A próxima atualização irá restaurá-los.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_Description">Limpar arquivos de ícones em cache. Os ícones ausentes serão baixados novamente na próxima atualização.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_FileLabel_All">ícone</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_FileLabel_Locked">ícone bloqueado</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressDeletingCount">Excluindo {0} arquivos em cache... ({1}/{2})</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressNoFiles">Não foram encontrados arquivos em cache de {0}.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressNoLockedReferences">Nenhuma referência a ícones de bloqueio em cache foi encontrada.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressScanning">Analisando arquivos em cache de {0}...</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_IconCache_ProgressScanningLockedReferences">Analisando referências a ícones de bloqueio em cache... ({0}/{1})</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Language">Idioma</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_LanguageHint">Idioma dos textos das conquistas quando a plataforma oferecer suporte. Caso contrário, será usado o inglês.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Maintenance_Title">Manutenção</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_OpenDataFolder">Abrir pasta de dados da extensão (inclui registros e cache)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_OpenDataFolderButton">Abrir pasta</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_PixelsUnit">pixels (vazio = ilimitado)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GridRowHeight">Altura das linhas</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GridMaxRows">Máximo de linhas</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GridColumnHeaderAlignment">Alinhamento do cabeçalho das colunas</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GridCellAlignment">Alinhamento das células</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GridCellVerticalAlignment">Alinhamento vertical das células</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GridAlignment_Center">Centralizado</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_DateDisplayMode_DateAndTime">Data e hora</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_DateDisplayMode_DateOnly">Somente data</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_DateDisplayMode_Relative">Relativa</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_LastPlayedDateDisplay">Formato da última partida</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_UnlockDateDisplay">Formato da data de desbloqueio</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_PlaytimeDisplay">Formato do tempo de jogo</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_PlaytimeDisplayMode_HoursMinutes">Horas e minutos</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_PlaytimeDisplayMode_HoursOnly">Somente horas</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProgressBadgeSource">Emblemas da barra de progresso</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProgressBadgeSource_TrophyWhenAvailable">Troféu quando disponível</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProgressBadgeSource_Help">Define quais emblemas aparecem abaixo da barra de progresso. A opção Troféu usa os troféus do jogo quando disponíveis e, caso contrário, sua distribuição de raridade.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_CategoryCompletionBadge">Emblema de conclusão da categoria</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_CategoryCompletionBadgeMode_First">Primeira</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_CategoryCompletionBadge_Help">Which category rows show the completed badge under their progress bar in category mode. First uses the first category in your configured category order, so it stays with that category when you sort the grid by a column.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_PixelsAutomaticUnit">pixels (empty = automatic)</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RowsUnlimitedUnit">rows (empty = unlimited)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_PixelsAutomaticUnit">pixels (vazio = automático)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RowsUnlimitedUnit">linhas (vazio = ilimitado)</sys:String>
 
-    <sys:String x:Key="LOCPlayAch_Settings_ProgressBarPreview">Progress Bar</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_SelectedGameGridSort">Selected Game Grid</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProgressBarPreview">Barra de progresso</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SelectedGameGridSort">Grade de jogos selecionados</sys:String>
 
     <!-- Provider: Shared -->
-    <sys:String x:Key="LOCPlayAch_Settings_ProviderAuth">{0} Authentication</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_NotConfigured">{0} not configured.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_ProviderConnection">{0} Connection</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_ProviderDisabledMessage">This platform is disabled. Enable it to track achievements.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_ProviderEnabled">Enable this platform</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProviderAuth">Autenticação de {0}</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_NotConfigured">{0} não configurado.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProviderConnection">Conexão com {0}</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProviderDisabledMessage">Esta plataforma está desativada. Ative-a para acompanhar as conquistas.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProviderEnabled">Ativar esta plataforma</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ProviderGroup_StoresLaunchers">Lojas e launchers</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ProviderGroup_ConsoleMobile">Consoles e dispositivos móveis</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ProviderGroup_EmulatorsRetro">Emuladores e retrô</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ProviderGroup_ManualAggregators">Manuais e agregadores</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_ProviderServicedByFormat">Uses {0}</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Friends">Friends</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_AutoDiscover">Auto-discover friends</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_AutoDiscoverHint">Choose platforms that can automatically populate this list.</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_UseExophaseForSteamOwnership">Use Exophase for Steam friend ownership</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_UseExophaseForSteamOwnershipHint">Adds missing Steam games from the merged Exophase profile when refreshing Steam friend ownership. Requires Exophase to be enabled.</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_IncludeUnownedGames">Include unowned games in refresh</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_IncludeUnownedGamesHint">Allow Full refreshes to scan friend games you do not own. When disabled, the Full mode is hidden and friend refreshes only cover games in your library.</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_ManualAdd">Add manual friend</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_MergeInvalid">Select at least two friends from different platforms to merge.</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_MergeSelected">Merge Selected</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_IgnoreSelected">Ignore Selected</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_UnignoreSelected">Un-ignore Selected</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_AllowFullScansSelected">Allow Full Scans</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_Merged">Merged</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_NoAutoProviders">No auto-discovery platforms are enabled.</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_RefreshCompleteFormat">Friends refreshed: {0:N0}.</sys:String>
-    <sys:String x:Key="LOCPlayAch_FriendsSettings_Unmerge">Unmerge</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplay">Friend name display</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplayHint">How friend names combine the profile name and the nickname you assigned on the platform. Renames entered in the table below always take priority.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplayMode_Persona">Profile name</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplayMode_Nickname">Nickname</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplayMode_PersonaAndNickname">Profile name (nickname)</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FriendsTableHint">Ignore friends to skip them during refreshes.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RefreshFriendsList">Refresh Friends List</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_UseExophaseForMetadata">Use Exophase for Metadata</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_UseExophaseForMetadata_Help">Fills missing achievement metadata from Exophase while keeping native achievement data. Requires an Exophase sign-in.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_BattleNet_UseDataForAzerothForWowRarity">Use Data for Azeroth for WoW Rarity</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_BattleNet_UseDataForAzerothForWowRarity_Help">Fills global rarity percentages from the Data for Azeroth website while keeping native achievement data.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_BattleNet_DataForAzerothSignInHint">Sign in to Data for Azeroth to read WoW rarity percentages. Until you do, achievements still sync without them.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ProviderServicedByFormat">Usa {0}</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Friends">Amigos</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_AutoDiscover">Descobrir amigos automaticamente</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_AutoDiscoverHint">Escolha as plataformas que podem preencher esta lista automaticamente.</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_UseExophaseForSteamOwnership">Usar Exophase para identificar os jogos Steam dos amigos</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_UseExophaseForSteamOwnershipHint">Adiciona jogos Steam ausentes a partir do perfil Exophase vinculado durante a atualização dos jogos dos amigos. Exige que o Exophase esteja ativado.</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_IncludeUnownedGames">Incluir jogos não adquiridos nas atualizações</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_IncludeUnownedGamesHint">Permite que atualizações completas verifiquem jogos dos amigos que você não possui. Se desativada, a opção Completa fica oculta e somente os jogos da sua biblioteca são verificados.</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_ManualAdd">Adicionar amigo manualmente</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_MergeInvalid">Selecione pelo menos dois amigos de plataformas diferentes para mesclar.</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_MergeSelected">Mesclar selecionados</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_IgnoreSelected">Ignorar selecionados</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_UnignoreSelected">Deixar de ignorar selecionados</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_AllowFullScansSelected">Permitir verificações completas</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_Merged">Mesclados</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_NoAutoProviders">Nenhuma plataforma com descoberta automática está ativada.</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_RefreshCompleteFormat">Amigos atualizados: {0:N0}.</sys:String>
+    <sys:String x:Key="LOCPlayAch_FriendsSettings_Unmerge">Desfazer mesclagem</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplay">Exibição dos nomes dos amigos</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplayHint">Define como os nomes dos amigos combinam o nome do perfil e o apelido atribuído na plataforma. As alterações feitas na tabela abaixo têm prioridade.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplayMode_Persona">Nome do perfil</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplayMode_Nickname">Apelido</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FriendNameDisplayMode_PersonaAndNickname">Nome do perfil (apelido)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FriendsTableHint">Ignore amigos para não incluí-los nas atualizações.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RefreshFriendsList">Atualizar lista de amigos</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_UseExophaseForMetadata">Usar Exophase para metadados</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_UseExophaseForMetadata_Help">Preenche metadados ausentes das conquistas usando o Exophase, preservando os dados originais. Exige login no Exophase.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_BattleNet_UseDataForAzerothForWowRarity">Usar Data for Azeroth para a raridade do WoW</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_BattleNet_UseDataForAzerothForWowRarity_Help">Preenche os percentuais globais de raridade a partir do site Data for Azeroth, preservando os dados originais das conquistas.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_BattleNet_DataForAzerothSignInHint">Entre no Data for Azeroth para consultar os percentuais de raridade do WoW. As conquistas continuarão sincronizando mesmo sem isso.</sys:String>
 
     <!-- Provider: PlayStation -->
-    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step1">Sign in at PlayStation.com</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step1Note">(check &quot;Trust this browser&quot;)</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step2">Open Sony SSO cookie page</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step2Note">and copy the npsso value</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step3">Paste the value below and press Enter</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_PsnNpsso">NPSSO Cookie</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_PsnNpssoHint">The page shows {&quot;npsso&quot;:&quot;xxx&quot;}. Copy only the xxx part.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step1">Entre em PlayStation.com</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step1Note">(marque &quot;Confiar neste navegador&quot;)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step2">Abra a página de cookies SSO da Sony</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step2Note">e copie o valor de npsso</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Psn_Step3">Cole o valor abaixo e pressione Enter</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_PsnNpsso">Cookie NPSSO</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_PsnNpssoHint">A página mostra {&quot;npsso&quot;:&quot;xxx&quot;}. Copie somente o conteúdo no lugar de xxx.</sys:String>
 
     <!-- Provider: FFXIV -->
     <!-- FFXIV_Profile: leave "Lodestone" and "FFXIV Collect" untranslated. -->
-    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_Profile">Lodestone or FFXIV Collect character profile URL</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_PublicNote">Achievements must be set to public on the Lodestone to be tracked.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_Profile">URL do perfil do personagem no Lodestone ou FFXIV Collect</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_PublicNote">As conquistas devem estar públicas no Lodestone para serem acompanhadas.</sys:String>
     <!-- FFXIV_CollectNote: {0} is a link whose text is the site name "FFXIV Collect". "Add" is that
          site's English-only button label; leave it, "FFXIV Collect", and "Lodestone" untranslated. -->
-    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_CollectNote">Unlock data comes from {0}, which indexes characters on demand. Search for your character there and select Add if it is not listed yet.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_Verifying">Checking character...</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_InvalidProfile">No character id found in the profile URL.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_AchievementsPrivate">Character found, but achievements are private on the Lodestone.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_CollectNote">Os dados de desbloqueios vêm de {0}, que cataloga personagens sob demanda. Procure seu personagem e selecione Adicionar caso ele ainda não apareça.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_Verifying">Verificando personagem...</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_InvalidProfile">Nenhum ID de personagem encontrado na URL do perfil.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_AchievementsPrivate">Personagem encontrado, mas as conquistas estão privadas no Lodestone.</sys:String>
     <!-- FFXIV_NotOnCollect: "Add" is the English-only button label on ffxivcollect.com; leave it,
          the domain, "FFXIV Collect", and "Lodestone" untranslated. -->
-    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_NotOnCollect">Character found on the Lodestone but not on FFXIV Collect. Search for it at ffxivcollect.com and select Add, then try again.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_FFXIV_NotOnCollect">Personagem encontrado no Lodestone, mas ausente no FFXIV Collect. Procure-o em ffxivcollect.com, selecione Adicionar e tente novamente.</sys:String>
     <!-- Provider: RetroAchievements -->
-    <sys:String x:Key="LOCPlayAch_Settings_RaUsername">Username</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaWebApiKey">Web API Key</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaWebApiKey_Help">Find your key in your RetroAchievements control panel:</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaPointsMode">Points Display</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaPointsMode_Description">TrueRatio weights points by rarity, so harder achievements are worth more.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaPointsMode_Points">Standard Points</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaPointsMode_Scaled">TrueRatio (Scaled)</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaEnableFuzzyNameMatching">Enable fuzzy name matching</sys:String>
-    <sys:String x:Key="LOCPlayAch_RaEnableSubsetScanning">Fetch RetroAchievements subsets</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaRarityStats">Rarity stats</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaUsername">Nome de usuário</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaWebApiKey">Chave da API Web</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaWebApiKey_Help">Encontre sua chave no painel de controle do RetroAchievements:</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaPointsMode">Exibição dos pontos</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaPointsMode_Description">O TrueRatio pondera os pontos pela raridade, valorizando conquistas mais difíceis.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaPointsMode_Points">Pontos padrão</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaPointsMode_Scaled">TrueRatio (ponderado)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaEnableFuzzyNameMatching">Ativar correspondência aproximada de nomes</sys:String>
+    <sys:String x:Key="LOCPlayAch_RaEnableSubsetScanning">Obter subconjuntos do RetroAchievements</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaRarityStats">Estatísticas de raridade</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_RaRarityStats_Casual">Casual</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaRarityStats_Description">Sets which rarity (hardcore or softcore) is shown for locked achievements. Unlocked achievements always use their own unlock mode.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RaEmulatorLogTracking">Instant unlocks (emulator log)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaRarityStats_Description">Define a raridade exibida nas conquistas bloqueadas (hardcore ou softcore). Conquistas desbloqueadas sempre usam o próprio modo de desbloqueio.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RaEmulatorLogTracking">Desbloqueios instantâneos (registro do emulador)</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_RaEmulatorLogTracking_Help">Detects unlocks instantly from your emulator's log file instead of polling the RetroAchievements website. Turn on log-to-file in the emulator; set a path override below only if the log isn't found automatically.</sys:String>
 
     <!-- Provider: Guild Wars 2 -->
-    <sys:String x:Key="LOCPlayAch_Settings_GW2_Help">Guild Wars 2 achievements are read from ArenaNet's official API, which needs a free API key tied to your Guild Wars 2 account:</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GW2_SetupStep2">2. Create a new key and tick progression. That is the only permission this plugin needs, and a key limited to it cannot read your wallet, inventory or trading post history.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GW2_SetupStep3">3. Copy the key into the box below, then click Check.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GW2_NoDatesNote">Guild Wars 2 does not record when an achievement was earned and publishes no completion rates, so Guild Wars 2 achievements show no unlock date and no rarity.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GW2_ApiKey_Help">The key is stored in the plugin settings in readable form and sent only to api.guildwars2.com. It can only read, and you can delete it at any time on the page where you created it.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_GW2_MissingProgression">The key is valid but lacks the progression permission. Create a new key with progression ticked.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GW2_Help">As conquistas de Guild Wars 2 são lidas pela API oficial da ArenaNet, que exige uma chave gratuita vinculada à sua conta:</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GW2_SetupStep2">2. Crie uma chave e marque progression. Esta é a única permissão necessária para a extensão e não permite consultar carteira, inventário nem histórico de negociações.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GW2_SetupStep3">3. Copie a chave para o campo abaixo e clique em Verificar.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GW2_NoDatesNote">Guild Wars 2 não registra as datas das conquistas nem publica taxas de conclusão. Por isso, elas aparecem sem data de desbloqueio e sem raridade.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GW2_ApiKey_Help">A chave é armazenada em formato legível nas configurações da extensão e enviada somente a api.guildwars2.com. Ela permite apenas leitura e pode ser excluída quando desejar no site em que foi criada.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_GW2_MissingProgression">A chave é válida, mas não possui a permissão progression. Crie outra chave com essa permissão marcada.</sys:String>
 
     <!-- Provider: Hypixel -->
-    <sys:String x:Key="LOCPlayAch_Settings_Hypixel_NoDatesNote">Achievements are read from your public Hypixel profile. Hypixel does not record when an achievement was earned, so Hypixel achievements show no unlock date.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Hypixel_PlayerNotFound">No Hypixel player found with that username.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Hypixel_NoDatesNote">As conquistas são lidas do seu perfil público no Hypixel. Como o Hypixel não registra quando foram obtidas, elas aparecem sem data de desbloqueio.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Hypixel_PlayerNotFound">Nenhum jogador do Hypixel encontrado com esse nome de usuário.</sys:String>
     <!-- Hypixel_Unavailable: leave the domain "hypixel.net" untranslated. -->
-    <sys:String x:Key="LOCPlayAch_Settings_Hypixel_Unavailable">hypixel.net could not be reached to look up the player. Try again later.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Hypixel_Unavailable">Não foi possível acessar hypixel.net para procurar o jogador. Tente novamente mais tarde.</sys:String>
 
     <!-- Provider: Minecraft -->
-    <sys:String x:Key="LOCPlayAch_Settings_MinecraftGameFoldersHint">Add a launcher folder such as %AppData%\PrismLauncher to read all of its instances, or a single instance or .minecraft folder. Empty reads %AppData%\.minecraft.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_MinecraftPlayerUuid">Player UUID</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_MinecraftPlayerUuid_Help">Optional. Leave empty to use the accounts signed in to your launchers.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_MinecraftGameFoldersHint">Adicione a pasta de um launcher, como %AppData%\PrismLauncher, para ler todas as suas instâncias, ou informe uma instância específica ou pasta .minecraft. Em branco, usa %AppData%\.minecraft.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_MinecraftPlayerUuid">UUID do jogador</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_MinecraftPlayerUuid_Help">Opcional. Deixe em branco para usar as contas conectadas nos seus launchers.</sys:String>
 
     <!-- Provider: Riot -->
-    <sys:String x:Key="LOCPlayAch_Settings_Riot_Help">Reading League of Legends Challenges uses Riot's official API, which needs a free API key tied to your Riot account. Riot publishes no per-player endpoint that works without one:</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Riot_SetupStep2">2. Copy the development API key shown on the dashboard into the API Key box below. Use the regenerate button there if it has expired.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Riot_SetupStep3">3. Enter your Riot ID and pick the region your account plays on, then click Check.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Riot_Expiry">A development key stops working after 24 hours and has to be regenerated each time. For a key that does not expire, use Register Product on the portal to apply for a personal key.</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_Riot_Note">Riot reviews personal and production applications separately; the {0} explains what to expect.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Riot_Help">Para ler os Desafios do League of Legends, é necessária uma chave gratuita da API oficial da Riot vinculada à sua conta. A Riot não fornece consulta por jogador sem essa chave:</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Riot_SetupStep2">2. Copie a chave de API de desenvolvimento exibida no painel para o campo abaixo. Se ela expirou, use o botão de regenerar.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Riot_SetupStep3">3. Informe seu Riot ID, escolha a região em que sua conta joga e clique em Verificar.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Riot_Expiry">A chave de desenvolvimento expira após 24 horas e precisa ser regenerada. Para solicitar uma chave sem expiração, use Registrar produto no portal.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Riot_Note">A Riot avalia separadamente solicitações pessoais e de produção; o {0} explica o processo.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_RiotId">Riot ID</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_RiotId_Help">Your in-game name and tag, for example Faker and KR1. The tag is the part after the # on your profile.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_RiotId_Help">Seu nome e sua tag no jogo, por exemplo, Faker e KR1. A tag é a parte após o # no perfil.</sys:String>
 
     <!-- Provider: Steam -->
-    <sys:String x:Key="LOCPlayAch_Settings_SteamHuntersCategories">SteamHunters Categories</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SteamHuntersCategories">Categorias do SteamHunters</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_SteamHuntersCategories_Help">Categories and Base/DLC types come from Steam's achievement sets. Merge keeps those and fills the rest from SteamHunters, Override uses SteamHunters for every achievement, Off uses Steam's sets only. Category art defaults to Steam store banners (changeable per game in Manage Achievements).</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_SteamHuntersCategories_Override">Override</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_SteamInstallPathOverride">Steam Install Path Override</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_SteamInstallPathOverride_Help">Optional. Leave empty to detect Steam from the current-user registry. Used for instant in-game monitoring and local offline refreshes.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SteamHuntersCategories_Override">Substituir</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SteamInstallPathOverride">Substituir pasta de instalação do Steam</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SteamInstallPathOverride_Help">Opcional. Deixe em branco para detectar o Steam pelo registro do usuário atual. Utilizado para monitoramento instantâneo durante o jogo e atualizações locais sem conexão.</sys:String>
     <!-- Provider: RPCS3 -->
     <sys:String x:Key="LOCPlayAch_Settings_Rpcs3ExecutablePath">Caminho do executável</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Rpcs3ExecutablePathHint">Caminho do arquivo rpcs3.exe.</sys:String>
@@ -974,11 +974,11 @@ Reclaimed {1}.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Ubisoft_Help">Log in to Ubisoft Connect in the browser window to read your achievements. Ubisoft achievements are tracked for games added by the Ubisoft Connect library extension, or for games given a manual Ubisoft product ID in Manage Achievements. Ubisoft publishes no completion rates, so rarity comes from Exophase when enabled below.</sys:String>
 
     <!-- Provider: Vita3K -->
-    <sys:String x:Key="LOCPlayAch_Settings_Vita3KExecutablePathHint">Path to Vita3K.exe. Trophies are read from the active Vita3K user.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Vita3KExecutablePathHint">Caminho do arquivo Vita3K.exe. Os troféus são lidos do usuário ativo no Vita3K.</sys:String>
 
     <!-- Provider: Xbox -->
-    <sys:String x:Key="LOCPlayAch_Settings_XboxLowResIcons">Download Smaller Icons</sys:String>
-    <sys:String x:Key="LOCPlayAch_Settings_XboxLowResIcons_Help">Enable if Xbox icon downloads are slow. Requests 128px icons instead of full resolution.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_XboxLowResIcons">Baixar ícones menores</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_XboxLowResIcons_Help">Ative se o download dos ícones do Xbox estiver lento. Solicita ícones de 128 px em vez da resolução original.</sys:String>
 
     <!-- Provider: Xenia -->
     <sys:String x:Key="LOCPlayAch_Settings_XeniaAccountPath">Pasta da conta</sys:String>
