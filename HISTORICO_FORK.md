@@ -12,7 +12,7 @@
 - Usamos os caminhos das imagens extraídas como ícones do provedor, sem adicionar campos fora do modelo de conquistas.
 - Registramos o arquivo de progresso no monitoramento nativo do Playnite Achievements, com observação de alterações e releitura de segurança.
 - Criamos configuração para indicar a pasta do SpartanPort e a pasta de salvamentos, mantendo a detecção pelo diretório de instalação do jogo.
-- Agrupamos o provedor na seção de emuladores e recompilados da interface.
+- Inicialmente agrupamos o provedor na seção de emuladores; posteriormente, criamos uma seção própria para recompilações.
 - Incluímos SpartanPort na ordem de exibição e atualização dos provedores da extensão.
 - Incluímos testes de integridade dos flags, leitura de TRP, 35 definições e textos locais.
 - Identificamos esta compilação como Playnite Achievements (SpartanPort), versão 4.1.1.1, mantendo o mesmo ID de extensão para atualização sem duplicação.
@@ -20,7 +20,6 @@
 
 ### Compatibilidade e segurança
 - Não alteramos o executável, os salvamentos, os arquivos de troféus ou as credenciais da PSN.
-- Nenhum serviço Python ou processo externo é necessário para detectar desbloqueios.
 - O progresso local não é confundido com as conquistas da conta PSN.
 - Um salvamento inexistente ou incompleto não é tratado como confirmação de progresso zerado.
 - Preservamos o código e a licença do projeto original.
@@ -57,3 +56,13 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Geramos `PlayniteAchievements_SpartanPort_BETA01.pext` como artefato instalável da execução.
 - Validamos a estrutura ZIP do pacote, a presença da DLL, do manifesto, do ícone e do executável auxiliar.
 - Mantemos pendente a validação real no Playnite, a identificação da pasta de dados no computador e os desbloqueios durante a partida.
+
+## 30/10/2026 — Organização das plataformas e localização
+
+- Criamos a seção **Recomps** nas configurações de plataformas, com divisão por PlayStation 4, PlayStation 3 e Xbox 360.
+- Movemos SpartanPort para PlayStation 4, preservando o identificador e os dados do provedor.
+- Adicionamos páginas informativas para PlayStation 3 e Xbox 360, sem criar provedores de conquistas fictícios.
+- Implementamos navegação com cabeçalhos de grupo e subgrupo no painel de plataformas.
+- Iniciamos a localização brasileira de `source/Localization/pt_BR.xaml`, com tradução de ações, tabelas, menus, edição de conquistas e configurações de plataformas.
+- Localizamos as configurações específicas do SpartanPort por meio de recursos em inglês e português, removendo explicações desnecessárias da interface.
+- A tradução completa do catálogo de textos e a validação visual permanecem em andamento.
