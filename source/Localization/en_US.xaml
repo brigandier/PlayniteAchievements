@@ -1796,4 +1796,8 @@
     <sys:String x:Key="LOCPlayAch_Settings_Recomp_NoReader">No achievement reader is available for this console yet.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Recomp_Info">Compatible native recompilation projects can be added here when their local achievement format is supported.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Recomp_NotAvailable">Not available</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_GameFolder">SpartanPort folder (leave empty to use the installation registered in Playnite):</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_SaveFolder">Save folder containing trophies.dat (optional):</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_Description">Achievements are read from SpartanPort's local trophy data.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_Browse">Browse...</sys:String>
 </ResourceDictionary>
