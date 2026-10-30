@@ -43,7 +43,8 @@ namespace PlayniteAchievements.Providers
                 "ShadPS4",
                 "Vita3K",
                 "Xenia",
-                "RPCS3"
+                "RPCS3",
+                "SpartanPort"
             };
 
         private static readonly HashSet<string> ManualAggregatorProviders =
