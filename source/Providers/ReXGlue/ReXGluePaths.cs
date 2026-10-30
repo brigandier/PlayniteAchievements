@@ -1,6 +1,7 @@
 using Playnite.SDK;
 using Playnite.SDK.Models;
 using PlayniteAchievements.Common;
+using PlayniteAchievements.Providers.Xenia;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,6 +42,11 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 IsArmyOfTwo(game.Name))
             {
                 titleId = "4541084C";
+            }
+
+            if (string.IsNullOrWhiteSpace(titleId))
+            {
+                titleId = ReadTitleIdFromXex(roots);
             }
 
             var rootsForSaves = new List<string>();
@@ -265,6 +271,46 @@ namespace PlayniteAchievements.Providers.ReXGlue
             {
                 return null;
             }
+        }
+
+        private static string ReadTitleIdFromXex(IEnumerable<string> roots)
+        {
+            foreach (var root in roots)
+            {
+                foreach (var candidate in new[]
+                {
+                    Path.Combine(root, "default.xex"),
+                    Path.Combine(root, "game", "default.xex")
+                })
+                {
+                    if (!File.Exists(candidate))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var info = XeniaTitleIDExtractor.GetFromXexFile(candidate);
+                        if (info?.TitleId != 0)
+                        {
+                            return info.TitleIdHex;
+                        }
+                    }
+                    catch (IOException)
+                    {
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                    }
+                    catch (InvalidDataException)
+                    {
+                    }
+                    catch (ArgumentException)
+                    {
+                    }
+                }
+            }
+            return null;
         }
 
         private static bool IsArmyOfTwo(string name)
