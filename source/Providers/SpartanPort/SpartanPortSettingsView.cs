@@ -24,19 +24,19 @@ namespace PlayniteAchievements.Providers.SpartanPort
             });
             panel.Children.Add(new TextBlock
             {
-                Text = "Pasta do SpartanPort (deixe em branco para usar a instalação registrada no Playnite):",
+                Text = ResourceProvider.GetString("LOCPlayAch_Settings_SpartanPort_GameFolder"),
                 TextWrapping = TextWrapping.Wrap
             });
             panel.Children.Add(MakePathRow(_root, () => _data.GameRoot = _root.Text));
             panel.Children.Add(new TextBlock
             {
-                Text = "Pasta dos salvamentos que contém trophies.dat (opcional):",
+                Text = ResourceProvider.GetString("LOCPlayAch_Settings_SpartanPort_SaveFolder"),
                 TextWrapping = TextWrapping.Wrap
             });
             panel.Children.Add(MakePathRow(_user, () => _data.UserDirectory = _user.Text));
             panel.Children.Add(new TextBlock
             {
-                Text = "As conquistas são identificadas a partir dos arquivos locais do SpartanPort.",
+                Text = ResourceProvider.GetString("LOCPlayAch_Settings_SpartanPort_Description"),
                 TextWrapping = TextWrapping.Wrap,
                 Margin = new Thickness(0, 4, 0, 0)
             });
@@ -67,7 +67,7 @@ namespace PlayniteAchievements.Providers.SpartanPort
             line.Children.Add(box);
             var browse = new Button
             {
-                Content = "Procurar...",
+                Content = ResourceProvider.GetString("LOCPlayAch_Settings_SpartanPort_Browse"),
                 VerticalAlignment = VerticalAlignment.Top,
                 MinWidth = 90,
                 Margin = new Thickness(0, 4, 0, 0)
