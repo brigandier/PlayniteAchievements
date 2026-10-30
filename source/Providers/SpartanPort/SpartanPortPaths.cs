@@ -23,9 +23,8 @@ namespace PlayniteAchievements.Providers.SpartanPort
             }
 
             var overrideRoot = Expand(settings?.GameRoot);
-            var installedRoot = Expand(PathExpansion.ExpandGamePath(api, game, game.InstallDirectory));
-            var root = !string.IsNullOrWhiteSpace(overrideRoot) ? overrideRoot : installedRoot;
-            if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
+            var root = ResolvePortDirectory(game, api, overrideRoot);
+            if (string.IsNullOrWhiteSpace(root))
             {
                 return null;
             }
@@ -50,10 +49,7 @@ namespace PlayniteAchievements.Providers.SpartanPort
             }
 
             var explicitRoot = !string.IsNullOrWhiteSpace(overrideRoot);
-            var nativeMarker = File.Exists(Path.Combine(root, "spartanport.ini")) ||
-                               File.Exists(Path.Combine(root, "user", "trophy_texts.txt")) ||
-                               File.Exists(Path.Combine(root, "launcher", "spartanport_trophies.py")) ||
-                               manifest?.Value<string>("user_dir") != null;
+            var nativeMarker = HasPortMarker(root);
             if (!explicitRoot && !nativeMarker)
             {
                 return null;
@@ -62,28 +58,100 @@ namespace PlayniteAchievements.Providers.SpartanPort
             var explicitUser = Expand(settings?.UserDirectory);
             var manifestUser = ResolveManifestPath(root, manifest, "user_dir");
             var environmentUser = Expand(Environment.GetEnvironmentVariable("SPARTAN_USER_DIR"));
-            var user = FirstExistingDirectory(explicitUser, manifestUser, environmentUser,
+            var user = FirstNonEmpty(explicitUser, manifestUser, environmentUser,
                 Path.Combine(root, "user"));
-            if (string.IsNullOrWhiteSpace(user))
-            {
-                user = explicitUser ?? manifestUser ?? environmentUser ?? Path.Combine(root, "user");
-            }
 
             var update = ResolveManifestPath(root, manifest, "update_dir");
             var gameFolder = ResolveManifestPath(root, manifest, "game_dir");
             var trp = FindPackage(update) ?? FindPackage(gameFolder) ?? FindPackage(root);
-            if (!explicitRoot && !File.Exists(Path.Combine(user, "trophies.dat")) &&
-                string.IsNullOrWhiteSpace(trp) && !nativeMarker)
-            {
-                return null;
-            }
-
             return new SpartanPortPaths
             {
                 Root = root,
                 UserDirectory = user,
                 TrophyPackage = trp
             };
+        }
+
+        private static string ResolvePortDirectory(Game game, IPlayniteAPI api, string overrideRoot)
+        {
+            if (!string.IsNullOrWhiteSpace(overrideRoot))
+            {
+                return Directory.Exists(overrideRoot) ? overrideRoot : null;
+            }
+
+            var candidates = new System.Collections.Generic.List<string>
+            {
+                Expand(Environment.GetEnvironmentVariable("SPARTAN_DATA_DIR")),
+                Expand(PathExpansion.ExpandGamePath(api, game, game.InstallDirectory))
+            };
+            if (game.GameActions != null)
+            {
+                foreach (var action in game.GameActions)
+                {
+                    var executable = Expand(PathExpansion.ExpandGamePath(api, game, action?.Path));
+                    if (string.IsNullOrWhiteSpace(executable))
+                    {
+                        continue;
+                    }
+
+                    var directory = Path.GetDirectoryName(executable);
+                    if (!string.IsNullOrWhiteSpace(directory))
+                    {
+                        candidates.Add(directory);
+                    }
+                }
+            }
+
+            foreach (var path in candidates)
+            {
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    var root = Path.GetFullPath(path);
+                    if (Directory.Exists(root) && HasPortMarker(root))
+                    {
+                        return root;
+                    }
+                }
+                catch (ArgumentException)
+                {
+                }
+                catch (NotSupportedException)
+                {
+                }
+                catch (PathTooLongException)
+                {
+                }
+            }
+
+            return null;
+        }
+
+        private static bool HasPortMarker(string root)
+        {
+            return File.Exists(Path.Combine(root, "settings.json")) ||
+                   File.Exists(Path.Combine(root, "spartanport.ini")) ||
+                   File.Exists(Path.Combine(root, "SpartanPort.exe")) ||
+                   File.Exists(Path.Combine(root, "Play SpartanPort.exe")) ||
+                   File.Exists(Path.Combine(root, "user", "trophies.dat")) ||
+                   File.Exists(Path.Combine(root, "launcher", "spartanport_trophies.py"));
+        }
+
+        private static string FirstNonEmpty(params string[] paths)
+        {
+            foreach (var path in paths)
+            {
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    return path;
+                }
+            }
+
+            return null;
         }
 
         private static bool IsGodOfWarThree(string gameName)
