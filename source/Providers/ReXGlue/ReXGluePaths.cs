@@ -298,13 +298,13 @@ namespace PlayniteAchievements.Providers.ReXGlue
                             return info.TitleIdHex;
                         }
                     }
+                    catch (InvalidDataException)
+                    {
+                    }
                     catch (IOException)
                     {
                     }
                     catch (UnauthorizedAccessException)
-                    {
-                    }
-                    catch (InvalidDataException)
                     {
                     }
                     catch (ArgumentException)
