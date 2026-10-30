@@ -128,9 +128,7 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 {
                     ApiName = AchievementKey(entry.Id),
                     DisplayName = entry.Name,
-                    Description = !wasUnlocked &&
-                        !string.IsNullOrWhiteSpace(entry.LockedDescription)
-                            ? entry.LockedDescription : entry.Description,
+                    Description = entry.Description ?? entry.LockedDescription,
                     UnlockedIconPath = icon,
                     Points = entry.Gamerscore,
                     Hidden = entry.Hidden,

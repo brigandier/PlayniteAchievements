@@ -98,3 +98,6 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Atualizamos a seleção de testes Windows para cobrir SpartanPort e ReXGlue e identificamos a versão experimental como 4.1.1.3.
 - Os recompilados que não exportam um catálogo legível ainda não são reconhecidos automaticamente; a leitura direta dos recursos XDBF do XEX permanece em estudo.
 - A execução real em jogos e a validação visual da interface ainda precisam ser confirmadas.
+
+- Corrigimos a descrição exibida após desbloqueio durante uma partida, preservando o texto original da conquista no cache.
+- Incluímos ReXGlue na geração de identificadores para enriquecimento de raridade com Exophase.

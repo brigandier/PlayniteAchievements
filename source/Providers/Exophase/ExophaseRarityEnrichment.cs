@@ -74,6 +74,7 @@ namespace PlayniteAchievements.Providers.Exophase
                 case "XBOX":
                     return $"{normalizedName}-{(XboxScanner.IsXbox360Game(game) ? "xbox-360" : "xbox")}";
                 case "XENIA":
+                case "REXGLUE":
                     return $"{normalizedName}-xbox-360";
                 case "EA":
                     return $"{normalizedName}-origin";
