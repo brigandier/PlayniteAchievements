@@ -112,6 +112,7 @@
     <Compile Include="..\..\source\Providers\ReXGlue\ReXGlueAchievementReader.cs" Link="Source\Providers\ReXGlue\ReXGlueAchievementReader.cs" />
     <Compile Include="..\..\source\Providers\ReXGlue\ReXGluePaths.cs" Link="Source\Providers\ReXGlue\ReXGluePaths.cs" />
     <Compile Include="..\..\source\Providers\ReXGlue\ReXGlueSettings.cs" Link="Source\Providers\ReXGlue\ReXGlueSettings.cs" />
+    <Compile Include="..\..\source\Providers\Unleashed\UnleashedAchievementReader.cs" Link="Source\Providers\Unleashed\UnleashedAchievementReader.cs" />
     <Compile Include="..\..\source\Providers\IInGameProgressSource.cs" Link="Source\Providers\IInGameProgressSource.cs" />
     <Compile Include="..\..\source\Models\RefreshMode.cs" Link="Source\Models\RefreshMode.cs" />
     <Compile Include="..\..\source\Models\CustomRefreshOptions.cs" Link="Source\Models\CustomRefreshOptions.cs" />

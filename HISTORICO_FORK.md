@@ -112,3 +112,5 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Implementamos um leitor binário independente para ACH-DATA, com validação da assinatura, versão, tamanho, checksum, registros e datas.
 - Adicionamos testes automatizados para os caminhos reais e para o leitor do Unleashed Recompiled.
 - Pendente: obter o catálogo original XDBF dos três jogos com segurança e integrar o novo leitor ao provedor; sem catálogo validado, não publicamos a BETA 04 como concluída.
+
+- Corrigimos a inclusão do novo leitor no projeto isolado de testes após a primeira compilação: o projeto principal já compilava, mas os testes não referenciavam o arquivo-fonte.
