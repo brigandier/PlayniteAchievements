@@ -9,6 +9,7 @@
 - Incluímos nomes e descrições em português, com prioridade para `user/trophy_texts/pt.txt` gerado pelo próprio port.
 - Adicionamos extração de PNGs do pacote `sce_sys/trophy/trophy00.trp` e geração de ícones cinza em cache da extensão.
 - Corrigimos a renovação dos ícones bloqueados quando os PNGs originais são atualizados e isolamos imagens inválidas sem interromper a leitura dos troféus.
+- Marcamos as imagens extraídas como ícones próprios da fonte local para preservar a arte original na apresentação.
 - Registramos o arquivo de progresso no monitoramento nativo do Playnite Achievements, com observação de alterações e releitura de segurança.
 - Criamos configuração para indicar a pasta do SpartanPort e a pasta de salvamentos, mantendo a detecção pelo diretório de instalação do jogo.
 - Agrupamos o provedor na seção de emuladores e recompilados da interface.
