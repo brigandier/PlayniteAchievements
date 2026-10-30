@@ -15,6 +15,8 @@ namespace PlayniteAchievements.Providers.ReXGlue
         public string CatalogPath { get; private set; }
         public string SavePath { get; private set; }
         public string TitleId { get; private set; }
+        public string XexPath { get; private set; }
+        public string GameRoot { get; private set; }
 
         public static ReXGluePaths Resolve(Game game, ReXGlueSettings settings, IPlayniteAPI api)
         {
@@ -31,11 +33,12 @@ namespace PlayniteAchievements.Providers.ReXGlue
 
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var catalog = FindCatalog(roots, game.Name, documents);
-            if (catalog == null ||
-                !ReXGlueAchievementReader.TryReadCatalog(catalog, out var achievements, out var titleId) ||
-                achievements.Count == 0)
+            string titleId = null;
+            if (catalog != null &&
+                (!ReXGlueAchievementReader.TryReadCatalog(catalog, out var achievements,
+                    out titleId) || achievements.Count == 0))
             {
-                return null;
+                catalog = null;
             }
 
             if (string.Equals(Path.GetExtension(catalog), ".tsv", StringComparison.OrdinalIgnoreCase) &&
@@ -92,11 +95,19 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 titleId = Path.GetFileNameWithoutExtension(savePath).ToUpperInvariant();
             }
 
+            if (catalog == null && savePath == null)
+            {
+                return null;
+            }
+
+            var xex = FindXexPath(roots);
             return new ReXGluePaths
             {
                 CatalogPath = catalog,
                 TitleId = titleId,
-                SavePath = savePath
+                SavePath = savePath,
+                XexPath = xex,
+                GameRoot = roots.FirstOrDefault()
             };
         }
 
@@ -343,6 +354,29 @@ namespace PlayniteAchievements.Providers.ReXGlue
             {
                 return null;
             }
+        }
+
+        internal static string FindXexPath(IEnumerable<string> roots)
+        {
+            foreach (var root in roots)
+            {
+                if (string.IsNullOrWhiteSpace(root))
+                {
+                    continue;
+                }
+                foreach (var path in new[]
+                {
+                    Path.Combine(root, "game", "default.xex"),
+                    Path.Combine(root, "default.xex")
+                })
+                {
+                    if (File.Exists(path))
+                    {
+                        return path;
+                    }
+                }
+            }
+            return null;
         }
 
         private static string ReadTitleIdFromXex(IEnumerable<string> roots)

@@ -70,14 +70,25 @@ namespace PlayniteAchievements.Providers.ReXGlue
                     {
                         ct.ThrowIfCancellationRequested();
                         var paths = ReXGluePaths.Resolve(game, ProviderSettings, _api);
-                        if (paths == null ||
-                            !ReXGlueAchievementReader.TryReadCatalog(
-                                paths.CatalogPath, out var catalog, out _))
+                        if (paths == null)
                         {
                             return ProviderRefreshExecutor.ProviderGameResult.Skipped();
                         }
 
-                        var data = LoadGame(game, paths, catalog);
+                        var catalogPath = paths.CatalogPath ??
+                            RecompXdbfExtractor.TryExtract(paths.XexPath, paths.TitleId,
+                                _pluginUserDataPath, _logger);
+                        if (!ReXGlueAchievementReader.TryReadCatalog(
+                                catalogPath, out var catalog, out _))
+                        {
+                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
+                        }
+                        if (ReblueExtraAchievements.IsReblue(paths.GameRoot))
+                        {
+                            ReblueExtraAchievements.AppendTo(catalog);
+                        }
+
+                        var data = LoadGame(game, paths, catalog, catalogPath);
                         if (data == null)
                         {
                             return ProviderRefreshExecutor.ProviderGameResult.Skipped();
@@ -108,7 +119,8 @@ namespace PlayniteAchievements.Providers.ReXGlue
         }
 
         private GameAchievementData LoadGame(
-            Game game, ReXGluePaths paths, IReadOnlyList<ReXGlueAchievement> catalog)
+            Game game, ReXGluePaths paths, IReadOnlyList<ReXGlueAchievement> catalog,
+            string catalogPath)
         {
             var read = ReXGlueAchievementReader.TryReadUnlocks(
                 paths.SavePath, out var unlocked);
@@ -123,7 +135,7 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 DateTime? when = null;
                 var wasUnlocked = read && unlocked.TryGetValue(entry.Id, out when);
                 var icon = ReXGlueAchievementReader.ResolveIcon(
-                    paths.CatalogPath, entry.IconPath);
+                    catalogPath, entry.IconPath);
                 details.Add(new AchievementDetail
                 {
                     ApiName = AchievementKey(entry.Id),
@@ -143,7 +155,7 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 PlayniteGameId = game.Id,
                 ProviderKey = ProviderKey,
                 ProviderGameKey = "rexglue:" + (paths.TitleId ??
-                    Path.GetFileNameWithoutExtension(paths.CatalogPath)),
+                    Path.GetFileNameWithoutExtension(catalogPath)),
                 LibrarySourceName = game.Source?.Name,
                 GameName = game.Name,
                 HasAchievements = true,
