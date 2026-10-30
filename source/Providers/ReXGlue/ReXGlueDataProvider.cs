@@ -43,8 +43,25 @@ namespace PlayniteAchievements.Providers.ReXGlue
 
         public bool IsCapable(Game game)
         {
-            return ProviderSettings.IsEnabled &&
-                ReXGluePaths.Resolve(game, ProviderSettings, _api) != null;
+            if (!ProviderSettings.IsEnabled)
+            {
+                return false;
+            }
+
+            var paths = ReXGluePaths.Resolve(game, ProviderSettings, _api);
+            if (paths != null)
+            {
+                return true;
+            }
+
+            if (game != null &&
+                (game.Name?.IndexOf("Dante", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                 game.Name?.IndexOf("Blue Dragon", StringComparison.OrdinalIgnoreCase) >= 0))
+            {
+                _logger?.Debug($"[ReXGlue] No achievement data found for '{game.Name}'. " +
+                    $"InstallDirectory='{game.InstallDirectory}', actions={game.GameActions?.Count ?? 0}.");
+            }
+            return false;
         }
 
         public async Task<RebuildPayload> RefreshAsync(
@@ -75,17 +92,32 @@ namespace PlayniteAchievements.Providers.ReXGlue
                             return ProviderRefreshExecutor.ProviderGameResult.Skipped();
                         }
 
+                        _logger?.Info($"[ReXGlue] '{game.Name}': TitleId={paths.TitleId ?? "unknown"}, " +
+                            $"save={(File.Exists(paths.SavePath) ? "found" : "missing")}, " +
+                            $"catalog={(File.Exists(paths.CatalogPath) ? "found" : "missing")}, " +
+                            $"xex={(File.Exists(paths.XexPath) ? "found" : "missing")}.");
+
                         var catalogPath = paths.CatalogPath ??
                             RecompXdbfExtractor.TryExtract(paths.XexPath, paths.TitleId,
                                 _pluginUserDataPath, _logger);
-                        if (!ReXGlueAchievementReader.TryReadCatalog(
-                                catalogPath, out var catalog, out _))
-                        {
-                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
-                        }
-                        if (ReblueExtraAchievements.IsReblue(paths.GameRoot))
+
+                        var catalogRead = ReXGlueAchievementReader.TryReadCatalog(
+                            catalogPath, out var catalog, out _);
+                        var isReblue = ReblueExtraAchievements.IsReblue(paths.GameRoot);
+                        if (isReblue)
                         {
                             ReblueExtraAchievements.AppendTo(catalog);
+                            if (!catalogRead)
+                            {
+                                _logger?.Warn($"[ReXGlue] '{game.Name}': original Xbox 360 " +
+                                    "catalog unavailable; showing native re:Blue extras only.");
+                            }
+                        }
+                        if (catalog.Count == 0)
+                        {
+                            _logger?.Warn($"[ReXGlue] '{game.Name}': XDBF catalog missing or " +
+                                "unreadable. Check the [Recomps] messages in Playnite.log.");
+                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
                         }
 
                         var data = LoadGame(game, paths, catalog, catalogPath);
@@ -126,8 +158,11 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 paths.SavePath, out var unlocked);
             if (!read && !string.IsNullOrWhiteSpace(paths.SavePath))
             {
+                _logger?.Warn($"[ReXGlue] '{game.Name}': unlock file could not be read.");
                 return null;
             }
+            _logger?.Info($"[ReXGlue] '{game.Name}': {catalog.Count} catalog entries, " +
+                $"{(read ? unlocked.Count : 0)} unlocked.");
             var details = new List<AchievementDetail>(catalog.Count);
 
             foreach (var entry in catalog)
@@ -136,6 +171,17 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 var wasUnlocked = read && unlocked.TryGetValue(entry.Id, out when);
                 var icon = ReXGlueAchievementReader.ResolveIcon(
                     catalogPath, entry.IconPath);
+                if (icon == null && entry.Id >= 65537 && entry.Id <= 65544 &&
+                    ReblueExtraAchievements.IsReblue(paths.GameRoot))
+                {
+                    var root = paths.GameRoot;
+                    var embedded = Path.Combine(root, "res", "embed", "achievements",
+                        "0x" + entry.Id.ToString("X") + ".png");
+                    if (File.Exists(embedded))
+                    {
+                        icon = embedded;
+                    }
+                }
                 details.Add(new AchievementDetail
                 {
                     ApiName = AchievementKey(entry.Id),
