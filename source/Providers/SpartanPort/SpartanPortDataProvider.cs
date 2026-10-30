@@ -98,6 +98,8 @@ namespace PlayniteAchievements.Providers.SpartanPort
                     IsCapstone = id == 0,
                     UnlockedIconPath = artwork?.Item1,
                     LockedIconPath = artwork?.Item2,
+                    HasSourceUnlockedIcon = artwork != null,
+                    HasSourceLockedIcon = artwork != null,
                     Category = "God of War III Remastered"
                 });
             }
