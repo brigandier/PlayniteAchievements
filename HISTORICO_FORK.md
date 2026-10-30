@@ -140,3 +140,6 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Reforçamos a descoberta de executáveis do Playnite, inclusive ações com argumentos, pastas de instalação vazias e perfis do re:Blue.
 - Blue Dragon passa a apresentar suas conquistas adicionais mesmo quando os metadados originais do Xbox 360 não forem extraídos.
 - A confirmação funcional dos catálogos originais depende de testes na instalação Windows, não sendo inferida apenas por testes unitários.
+
+- Corrigimos o roteamento de atualização: a ordem anterior selecionava Exophase/Manual antes de ReXGlue e deixava Unleashed Recompiled fora da ordem explícita, impedindo a prioridade dos provedores nativos em jogos que também podem ser reconhecidos pelo agregador.
+- Os provedores locais de recompilados agora têm prioridade quando encontram arquivos reais de progresso; overrides explícitos continuam prevalecendo.
