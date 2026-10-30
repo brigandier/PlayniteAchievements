@@ -1789,4 +1789,11 @@
     <sys:String x:Key="LOCPlayAch_Showcase_SlideshowSource_All">All captures</sys:String>
     <sys:String x:Key="LOCPlayAch_Timeline_SplitByPlatform">Split by platform</sys:String>
 
+    <sys:String x:Key="LOCPlayAch_Settings_ProviderGroup_Recomps">Recomps</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Recomp_PS4">PlayStation 4</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Recomp_PS3">PlayStation 3</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Recomp_Xbox360">Xbox 360</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Recomp_NoReader">No achievement reader is available for this console yet.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Recomp_Info">Compatible native recompilation projects can be added here when their local achievement format is supported.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Recomp_NotAvailable">Not available</sys:String>
 </ResourceDictionary>
