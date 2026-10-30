@@ -9,7 +9,7 @@
 - Incluímos nomes e descrições em português, com prioridade para `user/trophy_texts/pt.txt` gerado pelo próprio port.
 - Adicionamos extração de PNGs do pacote `sce_sys/trophy/trophy00.trp` e geração de ícones cinza em cache da extensão.
 - Corrigimos a renovação dos ícones bloqueados quando os PNGs originais são atualizados e isolamos imagens inválidas sem interromper a leitura dos troféus.
-- Marcamos as imagens extraídas como ícones próprios da fonte local para preservar a arte original na apresentação.
+- Usamos os caminhos das imagens extraídas como ícones do provedor, sem adicionar campos fora do modelo de conquistas.
 - Registramos o arquivo de progresso no monitoramento nativo do Playnite Achievements, com observação de alterações e releitura de segurança.
 - Criamos configuração para indicar a pasta do SpartanPort e a pasta de salvamentos, mantendo a detecção pelo diretório de instalação do jogo.
 - Agrupamos o provedor na seção de emuladores e recompilados da interface.
@@ -39,3 +39,11 @@
 
 ### Registro
 O histórico detalhado permanece nos commits do Git, separados por leitor, caminhos, configurações, integração, testes e empacotamento.
+
+## 30/10/2026 — Compilação local e correções
+
+- Removemos duas propriedades de ícones inexistentes no modelo `AchievementDetail`, que impediam a compilação.
+- Adicionamos `COMPILAR_PLAYNITE_SPARTANPORT.bat` para iniciar compilação local no Windows.
+- Adicionamos `compilar_spartanport.ps1` para obter a fork, atualizar `main` sem sobrescrever alterações, restaurar NuGet, localizar MSBuild, compilar Release, executar os testes SpartanPort e montar o pacote `.pext`.
+- Guardamos logs de execução e arquivos binários do MSBuild em `artefatos` para diagnosticar falhas.
+- Não consideramos a compilação validada até obter uma execução bem-sucedida no ambiente Windows.
