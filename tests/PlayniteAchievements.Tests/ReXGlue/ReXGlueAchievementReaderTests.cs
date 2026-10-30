@@ -46,6 +46,38 @@ namespace PlayniteAchievements.Tests.ReXGlue
         }
 
         [TestMethod]
+        public void PreservesPortugueseSubtableWithoutSwitchingToLaterLanguages()
+        {
+            var directory = NewFolder();
+            try
+            {
+                var path = Path.Combine(directory, "achievements.toml");
+                File.WriteAllText(path,
+                    "# Title ID: 58410A07\n" +
+                    "[[achievements]]\nid = 1\nlabel = \"The Story Begins\"\n" +
+                    "description = \"Finish stage one\"\ngamerscore = 5\n" +
+                    "[achievements.Portuguese]\nlabel = \"A história começa\"\n" +
+                    "description = \"Termine a primeira fase\"\n" +
+                    "[achievements.Japanese]\nlabel = \"別のタイトル\"\n" +
+                    "[[achievements]]\nid = 2\nlabel = \"Next\"\n" +
+                    "description = \"Finish stage two\"\n");
+
+                Assert.IsTrue(ReXGlueAchievementReader.TryReadCatalog(
+                    path, out var achievements, out var titleId));
+                Assert.AreEqual("58410A07", titleId);
+                Assert.AreEqual(2, achievements.Count);
+                Assert.AreEqual("A história começa", achievements[0].Name);
+                Assert.AreEqual("Termine a primeira fase", achievements[0].Description);
+                Assert.AreEqual(5, achievements[0].Gamerscore);
+                Assert.AreEqual("Next", achievements[1].Name);
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        [TestMethod]
         public void ReadsArmyOfTwoTabSeparatedCatalog()
         {
             var directory = NewFolder();
