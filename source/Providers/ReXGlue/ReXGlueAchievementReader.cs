@@ -64,7 +64,9 @@ namespace PlayniteAchievements.Providers.ReXGlue
             achievements = new List<ReXGlueAchievement>();
             titleId = null;
             ReXGlueAchievement current = null;
+            ReXGlueAchievement portuguese = null;
             var hasId = false;
+            var table = "default";
 
             foreach (var raw in File.ReadLines(path))
             {
@@ -76,15 +78,34 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 }
                 if (line == "[[achievements]]")
                 {
-                    if (current != null && hasId && !string.IsNullOrWhiteSpace(current.Name))
-                    {
-                        achievements.Add(current);
-                    }
+                    AppendLocalized(achievements, current, portuguese, hasId);
                     current = new ReXGlueAchievement();
+                    portuguese = null;
                     hasId = false;
+                    table = "default";
                     continue;
                 }
-                if (current == null || line.Length == 0 || line[0] == '#')
+
+                if (line.StartsWith("[achievements.", StringComparison.Ordinal) &&
+                    line.EndsWith("]", StringComparison.Ordinal))
+                {
+                    var language = line.Substring("[achievements.".Length,
+                        line.Length - "[achievements.".Length - 1).Trim('"');
+                    var preferred = string.Equals(language, "Portuguese",
+                        StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(language, "Brazilian Portuguese",
+                            StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(language, "pt-BR",
+                            StringComparison.OrdinalIgnoreCase);
+                    table = preferred ? "pt" : "other";
+                    if (preferred)
+                    {
+                        portuguese = new ReXGlueAchievement();
+                    }
+                    continue;
+                }
+
+                if (current == null || line.Length == 0 || line[0] == '#' || table == "other")
                 {
                     continue;
                 }
@@ -96,40 +117,49 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 }
                 var key = line.Substring(0, equals).Trim();
                 var value = line.Substring(equals + 1).Trim();
+                var target = table == "pt" ? portuguese : current;
+                if (target == null)
+                {
+                    continue;
+                }
+
                 switch (key)
                 {
                     case "id":
+                        if (table != "default") break;
                         hasId = TryParseUInt(value, out var id) && id != 0;
                         if (hasId) current.Id = id;
                         break;
                     case "label":
-                        current.Name = ParseString(value);
+                        target.Name = ParseString(value);
                         break;
                     case "description":
-                        current.Description = ParseString(value);
+                        target.Description = ParseString(value);
                         break;
                     case "unachieved_description":
-                        current.LockedDescription = ParseString(value);
+                        target.LockedDescription = ParseString(value);
                         break;
                     case "icon_path":
-                        current.IconPath = ParseString(value);
+                        if (table == "default") target.IconPath = ParseString(value);
                         break;
                     case "gamerscore":
-                        if (int.TryParse(value, NumberStyles.Integer,
-                            CultureInfo.InvariantCulture, out var points) && points >= 0)
+                        if (table == "default" &&
+                            int.TryParse(value, NumberStyles.Integer,
+                                CultureInfo.InvariantCulture, out var points) && points >= 0)
                         {
                             current.Gamerscore = points;
                         }
                         break;
                     case "image_id":
-                        if (string.IsNullOrWhiteSpace(current.IconPath) &&
+                        if (table == "default" &&
+                            string.IsNullOrWhiteSpace(current.IconPath) &&
                             TryParseUInt(value, out var image))
                         {
                             current.IconPath = Path.Combine("icons", image + ".png");
                         }
                         break;
                     case "flags":
-                        if (TryParseUInt(value, out var flags))
+                        if (table == "default" && TryParseUInt(value, out var flags))
                         {
                             current.Hidden = (flags & 8) == 0;
                         }
@@ -137,12 +167,28 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 }
             }
 
-            if (current != null && hasId && !string.IsNullOrWhiteSpace(current.Name))
-            {
-                achievements.Add(current);
-            }
+            AppendLocalized(achievements, current, portuguese, hasId);
 
             return Normalize(achievements);
+        }
+
+        private static void AppendLocalized(List<ReXGlueAchievement> result,
+            ReXGlueAchievement original, ReXGlueAchievement localized, bool hasId)
+        {
+            if (original == null || !hasId || string.IsNullOrWhiteSpace(original.Name))
+            {
+                return;
+            }
+
+            if (localized != null)
+            {
+                if (!string.IsNullOrWhiteSpace(localized.Name)) original.Name = localized.Name;
+                if (!string.IsNullOrWhiteSpace(localized.Description))
+                    original.Description = localized.Description;
+                if (!string.IsNullOrWhiteSpace(localized.LockedDescription))
+                    original.LockedDescription = localized.LockedDescription;
+            }
+            result.Add(original);
         }
 
         private static bool ReadTabSeparated(string path, out List<ReXGlueAchievement> achievements)
