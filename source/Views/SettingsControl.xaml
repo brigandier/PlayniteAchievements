@@ -52,7 +52,8 @@
                     ItemsSource="{Binding ProviderNavigationItems, ElementName=SettingsControlRoot}"
                     SelectedItem="{Binding SelectedProviderNavigationItem, ElementName=SettingsControlRoot, Mode=TwoWay}"
                     ShowSearch="True"
-                    EnableGrouping="True"/>
+                    EnableGrouping="True"
+                    EnableSubgrouping="True"/>
             </TabItem>
 
             <!-- ================== TAB: FRIENDS ================== -->
