@@ -263,7 +263,7 @@ namespace PlayniteAchievements.Providers.ReXGlue
             return null;
         }
 
-        private static List<string> FindGameRoots(Game game, IPlayniteAPI api)
+        internal static List<string> FindGameRoots(Game game, IPlayniteAPI api)
         {
             var list = new List<string>();
             var installed = NormalizePath(ExpandGamePath(api, game, game.InstallDirectory));
@@ -279,14 +279,18 @@ namespace PlayniteAchievements.Providers.ReXGlue
                     }
                     try
                     {
-                        var executable = NormalizePath(value);
+                        var executable = NormalizePath(ExtractExecutablePath(value));
                         if (executable != null)
                         {
                             var directory = Path.GetDirectoryName(executable);
-                            AddFolder(list, directory);
+                            if (Path.IsPathRooted(executable))
+                            {
+                                AddFolder(list, directory);
+                            }
                             if (!Path.IsPathRooted(value) && installed != null)
                             {
-                                AddFolder(list, Path.GetDirectoryName(Path.Combine(installed, value)));
+                                AddFolder(list,
+                                    Path.GetDirectoryName(Path.Combine(installed, value)));
                             }
                         }
                     }
@@ -307,6 +311,25 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 }
             }
             return list;
+        }
+
+        internal static string ExtractExecutablePath(string command)
+        {
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                return command;
+            }
+
+            var text = command.Trim();
+            if (text[0] == '"')
+            {
+                var quoteEnd = text.IndexOf('"', 1);
+                return quoteEnd > 1 ? text.Substring(1, quoteEnd - 1) : text.Trim('"');
+            }
+
+            var executable = Regex.Match(text, @"^.+?\.exe\b",
+                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            return executable.Success ? executable.Value : text;
         }
 
         private static string ExpandGamePath(IPlayniteAPI api, Game game, string path)
@@ -367,7 +390,9 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 foreach (var path in new[]
                 {
                     Path.Combine(root, "game", "default.xex"),
-                    Path.Combine(root, "default.xex")
+                    Path.Combine(root, "default.xex"),
+                    Path.Combine(root, "assets", "default.xex"),
+                    Path.Combine(root, "game", "assets", "default.xex")
                 })
                 {
                     if (File.Exists(path))
@@ -386,7 +411,9 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 foreach (var candidate in new[]
                 {
                     Path.Combine(root, "default.xex"),
-                    Path.Combine(root, "game", "default.xex")
+                    Path.Combine(root, "game", "default.xex"),
+                    Path.Combine(root, "assets", "default.xex"),
+                    Path.Combine(root, "game", "assets", "default.xex")
                 })
                 {
                     if (!File.Exists(candidate))
