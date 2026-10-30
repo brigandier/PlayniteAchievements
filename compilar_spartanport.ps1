@@ -84,16 +84,44 @@ try {
         if (-not $SemTestes) {
             $dotnet = Get-Command dotnet.exe -ErrorAction SilentlyContinue
             if ($dotnet) {
-                Write-Host '[6/7] Executando testes do SpartanPort...' -ForegroundColor Cyan
+                Write-Host '[6/7] Executando testes dos Recomps...' -ForegroundColor Cyan
                 $testProject = Join-Path $repo 'tests\PlayniteAchievements.Tests\PlayniteAchievements.Tests.csproj'
-                & $dotnet.Source test $testProject --configuration Release --filter 'FullyQualifiedName~SpartanPort' --logger "trx;LogFileName=spartanport_$stamp.trx"
+                & $dotnet.Source test $testProject --configuration Release --filter 'FullyQualifiedName~SpartanPort|FullyQualifiedName~ReXGlue|FullyQualifiedName~Unleashed' --logger "trx;LogFileName=spartanport_$stamp.trx"
                 if ($LASTEXITCODE -ne 0) {
-                    throw 'Testes do SpartanPort falharam. Envie o log; o pacote ainda nao sera gerado.'
+                    throw 'Testes dos Recomps falharam. Envie o log; o pacote ainda nao sera gerado.'
                 }
             } else {
                 Write-Warning 'SDK dotnet nao encontrado. Compilacao realizada, mas testes nao executados.'
             }
         }
+
+        Write-Host '[7/7] Preparando extrator XDBF nativo...' -ForegroundColor Cyan
+        $toolDir = Join-Path $release 'Tools\ReXGlue'
+        $tool = Join-Path $toolDir 'rexglue.exe'
+        if (-not (Test-Path $tool)) {
+            $sdkZip = Join-Path $outputDir 'rexglue-sdk-0.10.0-win-amd64.zip'
+            $sdkFolder = Join-Path $outputDir '_sdk_rexglue'
+            $sdkUrl = 'https://github.com/rexglue/rexglue-sdk/releases/download/v0.10.0/rexglue-sdk-0.10.0-win-amd64.zip'
+            $expectedHash = 'ad4485da853fbe932e9f5dbb643f9b5fe85dc73775ebbad4df6879fe6df0c11b'
+            if (-not (Test-Path $sdkZip)) {
+                Invoke-WebRequest -Uri $sdkUrl -OutFile $sdkZip -UseBasicParsing
+            }
+            $actualHash = (Get-FileHash -LiteralPath $sdkZip -Algorithm SHA256).Hash.ToLowerInvariant()
+            if ($actualHash -ne $expectedHash) {
+                throw 'SHA256 do SDK ReXGlue incorreto. Remova o ZIP em artefatos e tente novamente.'
+            }
+            Expand-Archive -LiteralPath $sdkZip -DestinationPath $sdkFolder -Force
+            $sdkCli = Get-ChildItem -LiteralPath $sdkFolder -Recurse -File -Filter rexglue.exe |
+                Select-Object -First 1
+            if (-not $sdkCli) { throw 'O SDK oficial nao contem rexglue.exe.' }
+            New-Item -ItemType Directory -Force -Path $toolDir | Out-Null
+            Get-ChildItem -LiteralPath $sdkCli.Directory.FullName -File |
+                Where-Object { $_.Name -eq 'rexglue.exe' -or $_.Extension -eq '.dll' } |
+                ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $toolDir -Force }
+            Copy-Item -LiteralPath (Join-Path $repo 'source\Providers\ReXGlue\REXGLUE_LICENSE.txt') -Destination (Join-Path $toolDir 'LICENSE-rexglue-sdk.txt') -Force
+            Remove-Item -LiteralPath $sdkFolder -Recurse -Force
+        }
+        if (-not (Test-Path $tool)) { throw 'Extrator XDBF nao encontrado.' }
 
         Write-Host '[7/7] Empacotando extensao .pext...' -ForegroundColor Cyan
         $manifest = Join-Path $repo 'source\extension.yaml'
@@ -109,7 +137,7 @@ try {
         }
         Copy-Item -LiteralPath $manifest -Destination $stage -Force
         Copy-Item -LiteralPath $icon -Destination $stage -Force
-        $zip = Join-Path $outputDir "PlayniteAchievements_SpartanPort_$stamp.zip"
+        $zip = Join-Path $outputDir "PlayniteAchievements_Recomps_BETA04_$stamp.zip"
         $pext = [IO.Path]::ChangeExtension($zip, '.pext')
         Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -CompressionLevel Optimal
         Move-Item -LiteralPath $zip -Destination $pext -Force

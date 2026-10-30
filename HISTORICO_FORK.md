@@ -128,3 +128,5 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Corrigimos a publicação do pacote BETA 04 no workflow: o nome do arquivo no upload permaneceu apontando para a BETA 03, embora a primeira compilação e 20 testes tenham passado.
 - Atualizamos o nome exibido da extensão para Playnite Achievements (Recomps), mantendo o identificador original e os créditos do upstream.
 - Preservamos os créditos dos desenvolvedores nas descrições das oito conquistas adicionais do re:Blue.
+
+- Alinhamos a compilação local em Windows ao pacote do GitHub Actions, incluindo a CLI XDBF oficial com hash SHA256, testes SpartanPort/ReXGlue/Unleashed e identificação BETA 04; adicionamos o atalho COMPILAR_PLAYNITE_RECOMPS.bat.
