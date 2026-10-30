@@ -144,14 +144,33 @@ namespace PlayniteAchievements.Providers.SpartanPort
                 {
                     var unlocked = Path.Combine(folder, $"trophy_{icon.Key:D3}.png");
                     var locked = Path.Combine(folder, $"trophy_{icon.Key:D3}_locked.png");
-                    if (!File.Exists(unlocked) || !File.ReadAllBytes(unlocked).SequenceEqual(icon.Value))
+                    var imageChanged = !File.Exists(unlocked) ||
+                        !File.ReadAllBytes(unlocked).SequenceEqual(icon.Value);
+                    if (imageChanged)
                     {
                         File.WriteAllBytes(unlocked, icon.Value);
                     }
 
-                    if (!File.Exists(locked))
+                    if (imageChanged || !File.Exists(locked))
                     {
-                        CreateLockedIcon(icon.Value, locked);
+                        try
+                        {
+                            CreateLockedIcon(icon.Value, locked);
+                        }
+                        catch (ArgumentException)
+                        {
+                            if (File.Exists(locked))
+                            {
+                                File.Delete(locked);
+                            }
+                        }
+                        catch (System.Runtime.InteropServices.ExternalException)
+                        {
+                            if (File.Exists(locked))
+                            {
+                                File.Delete(locked);
+                            }
+                        }
                     }
 
                     result[icon.Key] = Tuple.Create(unlocked, File.Exists(locked) ? locked : unlocked);
