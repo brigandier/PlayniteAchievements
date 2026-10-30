@@ -154,6 +154,8 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 var candidates = new[]
                 {
                     Path.Combine(root, "metadata", "achievements.toml"),
+                    Path.Combine(root, "game-info", "achievements.toml"),
+                    Path.Combine(root, "src", "achievements.toml"),
                     Path.Combine(root, "achievements.toml"),
                     Path.Combine(root, "cache", "achievements", "catalog.tsv"),
                     Path.Combine(root, "user_data", "cache", "achievements", "catalog.tsv")
