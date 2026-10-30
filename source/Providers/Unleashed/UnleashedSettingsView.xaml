@@ -1,0 +1,45 @@
+<settings:ProviderSettingsViewBase x:Class="PlayniteAchievements.Providers.Unleashed.UnleashedSettingsView"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:settings="clr-namespace:PlayniteAchievements.Providers.Settings"
+            xmlns:controls="clr-namespace:PlayniteAchievements.Views.Controls">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/PlayniteAchievements;component/Providers/ProviderSettingsScopedControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="20">
+            <StackPanel Style="{StaticResource ProviderHeaderPanelStyle}">
+                <Viewbox Style="{StaticResource ProviderHeaderIconStyle}">
+                    <Path Data="{StaticResource GeoReXGlue}" Fill="#287EB0"/>
+                </Viewbox>
+                <TextBlock Text="{DynamicResource LOCPlayAch_Provider_UnleashedRecompiled}"
+                           Style="{StaticResource ProviderTitleTextStyle}"/>
+            </StackPanel>
+            <Border Style="{StaticResource ProviderEnableToggleBorderStyle}" Grid.IsSharedSizeScope="True">
+                <controls:SettingRow Label="{DynamicResource LOCPlayAch_Settings_ProviderEnabled}"
+                                     FontWeight="SemiBold" Margin="0">
+                    <CheckBox IsChecked="{Binding Settings.IsEnabled, Mode=TwoWay}"/>
+                </controls:SettingRow>
+            </Border>
+            <TextBlock Text="{DynamicResource LOCPlayAch_Settings_ProviderDisabledMessage}"
+                       Style="{StaticResource ProviderDisabledMessageStyle}"/>
+            <Border Style="{StaticResource SectionBorderStyle}" IsEnabled="{Binding Settings.IsEnabled}">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource LOCPlayAch_Settings_Unleashed_Description}"
+                               Style="{StaticResource MutedTextStyle}" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource SectionBorderStyle}" IsEnabled="{Binding Settings.IsEnabled}"
+                    Grid.IsSharedSizeScope="True">
+                <controls:SettingRow Label="{DynamicResource LOCPlayAch_Settings_UseExophaseForMetadata}"
+                                     Hint="{DynamicResource LOCPlayAch_Settings_UseExophaseForMetadata_Help}" Margin="0">
+                    <CheckBox IsChecked="{Binding Settings.UseExophaseForRarity, Mode=TwoWay}"/>
+                </controls:SettingRow>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</settings:ProviderSettingsViewBase>

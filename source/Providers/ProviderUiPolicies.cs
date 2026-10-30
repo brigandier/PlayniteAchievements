@@ -51,7 +51,8 @@ namespace PlayniteAchievements.Providers
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
                 "SpartanPort",
-                "ReXGlue"
+                "ReXGlue",
+                "UnleashedRecompiled"
             };
 
         private static readonly HashSet<string> ManualAggregatorProviders =
@@ -116,7 +117,8 @@ namespace PlayniteAchievements.Providers
             {
                 return "LOCPlayAch_Settings_Recomp_PS4";
             }
-            if (string.Equals(providerKey, "ReXGlue", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(providerKey, "ReXGlue", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(providerKey, "UnleashedRecompiled", StringComparison.OrdinalIgnoreCase))
             {
                 return "LOCPlayAch_Settings_Recomp_Xbox360";
             }

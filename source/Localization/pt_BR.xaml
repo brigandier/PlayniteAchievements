@@ -1813,4 +1813,6 @@ Continue?</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_UserFolder">Pasta dos dados do usuário (opcional; deixe em branco para detectar automaticamente):</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_Description">Lê as definições das conquistas do catálogo local e os desbloqueios dos arquivos de salvamento do ReXGlue. Uma pasta personalizada substitui a detecção automática dos salvamentos.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_AutoDetect">Detecção automática ativada</sys:String>
+    <sys:String x:Key="LOCPlayAch_Provider_UnleashedRecompiled">Unleashed Recompiled</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Unleashed_Description">Lê os metadados de conquistas do Sonic Unleashed instalado e acompanha o progresso local no arquivo ACH-DATA, sem modificar os arquivos do jogo.</sys:String>
 </ResourceDictionary>

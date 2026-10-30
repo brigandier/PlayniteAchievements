@@ -1808,4 +1808,6 @@
     <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_UserFolder">Optional user data folder (leave empty for automatic discovery):</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_Description">Reads achievement definitions from the game's local catalog and unlocks from ReXGlue save files. A custom folder overrides automatic save location discovery.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_AutoDetect">Automatic discovery is enabled</sys:String>
+    <sys:String x:Key="LOCPlayAch_Provider_UnleashedRecompiled">Unleashed Recompiled</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_Unleashed_Description">Reads Xbox 360 achievement metadata from the installed Sonic Unleashed game and tracks the local ACH-DATA progress file without changing any game files.</sys:String>
 </ResourceDictionary>
