@@ -24,19 +24,19 @@ namespace PlayniteAchievements.Providers.SpartanPort
             });
             panel.Children.Add(new TextBlock
             {
-                Text = "Game folder (leave empty to use the Playnite installation directory):",
+                Text = "Pasta do SpartanPort (deixe em branco para usar a instalação registrada no Playnite):",
                 TextWrapping = TextWrapping.Wrap
             });
             panel.Children.Add(MakePathRow(_root, () => _data.GameRoot = _root.Text));
             panel.Children.Add(new TextBlock
             {
-                Text = "Saves folder containing trophies.dat (optional):",
+                Text = "Pasta dos salvamentos que contém trophies.dat (opcional):",
                 TextWrapping = TextWrapping.Wrap
             });
             panel.Children.Add(MakePathRow(_user, () => _data.UserDirectory = _user.Text));
             panel.Children.Add(new TextBlock
             {
-                Text = "Achievements are read from SpartanPort's local files. No PSN account, Python, or external monitor is required.",
+                Text = "As conquistas são identificadas a partir dos arquivos locais do SpartanPort.",
                 TextWrapping = TextWrapping.Wrap,
                 Margin = new Thickness(0, 4, 0, 0)
             });
@@ -67,7 +67,7 @@ namespace PlayniteAchievements.Providers.SpartanPort
             line.Children.Add(box);
             var browse = new Button
             {
-                Content = "Browse...",
+                Content = "Procurar...",
                 VerticalAlignment = VerticalAlignment.Top,
                 MinWidth = 90,
                 Margin = new Thickness(0, 4, 0, 0)
