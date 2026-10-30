@@ -38,8 +38,9 @@ jobs:
         run: msbuild source/PlayniteAchievements.csproj /p:Configuration=Release /p:Platform=AnyCPU /m:1 /v:normal /bl:spartanport-build.binlog
 
       - name: Run local achievement and regression tests
+        timeout-minutes: 12
         shell: pwsh
-        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "TestCategory!=LocalInstallation" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
+        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "TestCategory!=LocalInstallation" --blame-hang-timeout 2m --blame-hang-dump-type none --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
 
       - name: Prepare native Xbox 360 metadata extractor
         shell: pwsh
@@ -95,6 +96,7 @@ jobs:
             spartanport-tests.binlog
             spartanport-build.binlog
             tests/PlayniteAchievements.Tests/TestResults/**/*.trx
+            tests/PlayniteAchievements.Tests/TestResults/**/Sequence*.xml
           if-no-files-found: warn
           retention-days: 30
 
