@@ -28,11 +28,11 @@ jobs:
 
       - name: Run native trophy reader tests
         shell: pwsh
-        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter FullyQualifiedName~SpartanPortTrophyReaderTests
+        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "FullyQualifiedName~SpartanPort" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
 
       - name: Compile extension
         shell: pwsh
-        run: msbuild source/PlayniteAchievements.csproj /p:Configuration=Release /p:Platform=AnyCPU /m:1 /v:minimal
+        run: msbuild source/PlayniteAchievements.csproj /p:Configuration=Release /p:Platform=AnyCPU /m:1 /v:normal /bl:spartanport-build.binlog
 
       - name: Package extension
         shell: pwsh
@@ -49,6 +49,18 @@ jobs:
           $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_SpartanPort_BETA01.zip"
           Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
           Rename-Item -Path $zip -NewName "PlayniteAchievements_SpartanPort_BETA01.pext"
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpartanPort-Build-Diagnostics
+          path: |
+            spartanport-tests.binlog
+            spartanport-build.binlog
+            tests/PlayniteAchievements.Tests/TestResults/**/*.trx
+          if-no-files-found: warn
+          retention-days: 30
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
