@@ -38,6 +38,32 @@ jobs:
         shell: pwsh
         run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "FullyQualifiedName~SpartanPort|FullyQualifiedName~ReXGlue|FullyQualifiedName~Unleashed" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
 
+      - name: Prepare native Xbox 360 metadata extractor
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $download = Join-Path $env:RUNNER_TEMP "rexglue-sdk-0.10.0-win-amd64.zip"
+          $unpacked = Join-Path $env:RUNNER_TEMP "rexglue-sdk"
+          Invoke-WebRequest -Uri "https://github.com/rexglue/rexglue-sdk/releases/download/v0.10.0/rexglue-sdk-0.10.0-win-amd64.zip" -OutFile $download
+          $actual = (Get-FileHash -LiteralPath $download -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne "ad4485da853fbe932e9f5dbb643f9b5fe85dc73775ebbad4df6879fe6df0c11b") {
+            throw "XDBF SDK archive SHA256 mismatch."
+          }
+          Expand-Archive -LiteralPath $download -DestinationPath $unpacked -Force
+          $cli = Get-ChildItem -LiteralPath $unpacked -Filter rexglue.exe -File -Recurse | Select-Object -First 1
+          if (-not $cli) { throw "SDK archive does not contain rexglue.exe." }
+          $target = Join-Path $PWD "source/bin/Release/Tools/ReXGlue"
+          New-Item -ItemType Directory -Force -Path $target | Out-Null
+          Get-ChildItem -LiteralPath $cli.Directory.FullName -File |
+            Where-Object { $_.Name -eq "rexglue.exe" -or $_.Extension -eq ".dll" } |
+            ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $target -Force }
+          Copy-Item -LiteralPath "source/Providers/ReXGlue/REXGLUE_LICENSE.txt" -Destination (Join-Path $target "LICENSE-rexglue-sdk.txt") -Force
+          if (-not (Test-Path (Join-Path $target "rexglue.exe"))) {
+            throw "XDBF extractor was not packaged."
+          }
+          & (Join-Path $target "rexglue.exe") --help
+          if ($LASTEXITCODE -ne 0) { throw "Packaged rexglue CLI could not start." }
+
       - name: Package extension
         shell: pwsh
         run: |
@@ -50,9 +76,9 @@ jobs:
           Copy-Item (Join-Path $build "*") $stage -Recurse -Force
           Copy-Item source/extension.yaml $stage -Force
           Copy-Item source/icon.png $stage -Force
-          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_ReXGlue_BETA03.zip"
+          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_Recomps_BETA04.zip"
           Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
-          Rename-Item -Path $zip -NewName "PlayniteAchievements_ReXGlue_BETA03.pext"
+          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA04.pext"
 
       - name: Upload diagnostics
         if: always()
@@ -69,7 +95,7 @@ jobs:
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: PlayniteAchievements-SpartanPort-Windows
+          name: PlayniteAchievements-Recomps-BETA04-Windows
           path: ${{ runner.temp }}/PlayniteAchievements_ReXGlue_BETA03.pext
           if-no-files-found: error
           retention-days: 30

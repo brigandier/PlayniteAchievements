@@ -243,6 +243,22 @@ namespace PlayniteAchievements.Tests.ReXGlue
             }
         }
 
+        [TestMethod]
+        public void IncludesAllEightReblueCustomAchievementsWithoutDuplicating()
+        {
+            var achievements = new System.Collections.Generic.List<ReXGlueAchievement>
+            {
+                new ReXGlueAchievement { Id = 1, Name = "Original" }
+            };
+            ReblueExtraAchievements.AppendTo(achievements);
+            ReblueExtraAchievements.AppendTo(achievements);
+            Assert.AreEqual(9, achievements.Count);
+            var custom = achievements.Single(row => row.Id == 65542);
+            Assert.AreEqual("Cloaca Maxima", custom.Name);
+            Assert.AreEqual(420, custom.Gamerscore);
+            Assert.IsTrue(custom.Hidden);
+        }
+
         private static string NewFolder()
         {
             var directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));

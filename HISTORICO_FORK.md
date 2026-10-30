@@ -114,3 +114,13 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Pendente: obter o catálogo original XDBF dos três jogos com segurança e integrar o novo leitor ao provedor; sem catálogo validado, não publicamos a BETA 04 como concluída.
 
 - Corrigimos a inclusão do novo leitor no projeto isolado de testes após a primeira compilação: o projeto principal já compilava, mas os testes não referenciavam o arquivo-fonte.
+
+## 30/10/2026 — Recomps BETA 04
+
+- Integramos a extração automática de catálogos XDBF e ícones via CLI nativo do ReXGlue SDK 0.10.0, com cache exclusivo da extensão e validação do Title ID, preservando os arquivos do jogo.
+- Incluímos os oito IDs adicionais do re:Blue, incluindo Cloaca Maxima (ID 65542, 420G), sem duplicar conquistas nativas.
+- Implementamos o provedor Unleashed Recompiled na navegação Recomps → Xbox 360, lendo o ACH-DATA local com horários de desbloqueio e os metadados XDBF originais.
+- Adicionamos configurações e textos em inglês e português para Unleashed Recompiled, além do enriquecimento opcional de raridade via Exophase.
+- Empacotamos uma CLI de extração nativa licenciada sob BSD-3-Clause, baixada do lançamento oficial e validada por SHA256 no GitHub Actions.
+- Atualizamos o manifesto para 4.1.1.4 e o artefato instalável para BETA 04.
+- Nenhum arquivo original dos recompilados é modificado. A validação funcional dentro do Playnite e do SDK com os XEX reais continua necessária.
