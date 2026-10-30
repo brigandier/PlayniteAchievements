@@ -2,6 +2,7 @@ using Playnite.SDK;
 using Playnite.SDK.Models;
 using PlayniteAchievements.Models;
 using PlayniteAchievements.Models.Achievements;
+using PlayniteAchievements.Models.Friends;
 using PlayniteAchievements.Providers.Exophase;
 using PlayniteAchievements.Providers.Settings;
 using PlayniteAchievements.Services.Refresh;
