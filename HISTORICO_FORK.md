@@ -25,10 +25,16 @@
 - Um salvamento inexistente ou incompleto não é tratado como confirmação de progresso zerado.
 - Preservamos o código e a licença do projeto original.
 
+### Ajustes de diagnóstico e descoberta
+- Reforçamos a localização da instalação a partir do caminho configurado, diretório do jogo, variável `SPARTAN_DATA_DIR` e ações de inicialização do Playnite.
+- Separamos a escolha da pasta de salvamentos da existência prévia de arquivos, respeitando `user_dir`, `SPARTAN_USER_DIR` e o diretório padrão.
+- Adicionamos testes de caminho para instalação independente, diretório personalizado e rejeição de jogos não correspondentes.
+- Passamos a preservar os diagnósticos de testes e compilação como artefatos do GitHub Actions, inclusive em caso de falha.
+
 ### Validação
 - Código integrado na branch `main` da fork.
 - Testes automatizados adicionados ao projeto de testes do repositório.
-- Compilação no Windows e teste de desbloqueio durante uma partida: aguardam resultado do pipeline e validação em jogo.
+- Compilação no Windows e teste de desbloqueio durante uma partida: ainda não confirmados. Os logs de execução do GitHub Actions precisam ser consultados para identificar possíveis falhas.
 - Próxima etapa: confirmar a detecção do diretório real do SpartanPort no Playnite, testar atualizações em tempo real e avaliar leitores genéricos para outros ports.
 
 ### Registro
