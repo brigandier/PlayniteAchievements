@@ -26,13 +26,13 @@ jobs:
         shell: pwsh
         run: nuget restore source/PlayniteAchievements.sln -NonInteractive
 
-      - name: Run native trophy reader tests
-        shell: pwsh
-        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "FullyQualifiedName~SpartanPort" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
-
       - name: Compile extension
         shell: pwsh
         run: msbuild source/PlayniteAchievements.csproj /p:Configuration=Release /p:Platform=AnyCPU /m:1 /v:normal /bl:spartanport-build.binlog
+
+      - name: Run native trophy reader tests
+        shell: pwsh
+        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "FullyQualifiedName~SpartanPort" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
 
       - name: Package extension
         shell: pwsh
