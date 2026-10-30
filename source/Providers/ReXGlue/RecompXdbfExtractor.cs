@@ -19,6 +19,8 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 !File.Exists(xexPath) ||
                 string.IsNullOrWhiteSpace(pluginDataRoot))
             {
+                logger?.Warn("[Recomps] XDBF extraction skipped: original XEX or " +
+                    "extension data directory not found.");
                 return null;
             }
 
@@ -48,9 +50,12 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 var catalog = Path.Combine(outDir, "achievements.toml");
                 if (IsValidCatalog(catalog, expectedTitleId))
                 {
+                    logger?.Debug("[Recomps] Existing XDBF metadata cache is valid.");
                     return catalog;
                 }
 
+                logger?.Info("[Recomps] Extracting native Xbox 360 achievements from: " +
+                    xexPath);
                 Directory.CreateDirectory(outDir);
                 using (var process = new Process
                 {
@@ -62,28 +67,60 @@ namespace PlayniteAchievements.Providers.ReXGlue
                         WorkingDirectory = Path.GetDirectoryName(tool),
                         CreateNoWindow = true,
                         UseShellExecute = false,
-                        WindowStyle = ProcessWindowStyle.Hidden
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
                     }
                 })
                 {
+                    var output = new StringBuilder();
+                    var outputSync = new object();
+                    Action<string> append = line =>
+                    {
+                        if (string.IsNullOrWhiteSpace(line)) return;
+                        lock (outputSync)
+                        {
+                            output.AppendLine(line);
+                            if (output.Length > 12000)
+                            {
+                                output.Remove(0, output.Length - 12000);
+                            }
+                        }
+                    };
+                    process.OutputDataReceived += (sender, args) => append(args.Data);
+                    process.ErrorDataReceived += (sender, args) => append(args.Data);
                     if (!process.Start())
                     {
+                        logger?.Warn("[Recomps] XDBF process could not start.");
                         return null;
                     }
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
                     if (!process.WaitForExit(TimeoutMilliseconds))
                     {
                         try { process.Kill(); } catch (InvalidOperationException) { }
                         logger?.Warn("[Recomps] XDBF extraction timed out.");
                         return null;
                     }
+                    process.WaitForExit();
+                    var details = output.ToString().Trim();
                     if (process.ExitCode != 0)
                     {
-                        logger?.Warn($"[Recomps] XDBF extraction failed with code {process.ExitCode}.");
+                        logger?.Warn($"[Recomps] XDBF extraction failed (exit {process.ExitCode}): " +
+                            details);
                         return null;
                     }
+                    logger?.Debug("[Recomps] XDBF extractor output: " + details);
                 }
 
-                return IsValidCatalog(catalog, expectedTitleId) ? catalog : null;
+                if (!IsValidCatalog(catalog, expectedTitleId))
+                {
+                    logger?.Warn("[Recomps] The XDBF extractor exited successfully " +
+                        "but the catalog was empty, unreadable or had a different Title ID.");
+                    return null;
+                }
+                logger?.Info("[Recomps] Native Xbox 360 achievements extracted successfully.");
+                return catalog;
             }
             catch (System.ComponentModel.Win32Exception ex)
             {
