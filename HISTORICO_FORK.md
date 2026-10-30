@@ -11,6 +11,7 @@
 - Registramos o arquivo de progresso no monitoramento nativo do Playnite Achievements, com observação de alterações e releitura de segurança.
 - Criamos configuração para indicar a pasta do SpartanPort e a pasta de salvamentos, mantendo a detecção pelo diretório de instalação do jogo.
 - Agrupamos o provedor na seção de emuladores e recompilados da interface.
+- Incluímos SpartanPort na ordem de exibição e atualização dos provedores da extensão.
 - Incluímos testes de integridade dos flags, leitura de TRP, 35 definições e textos locais.
 - Identificamos esta compilação como Playnite Achievements (SpartanPort), versão 4.1.1.1, mantendo o mesmo ID de extensão para atualização sem duplicação.
 - Adicionamos build para Windows pelo GitHub Actions, com geração de pacote `.pext`.
