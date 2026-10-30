@@ -1620,4 +1620,8 @@ Continue?</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Recomp_NoReader">Ainda não há um leitor de conquistas disponível para este console.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Recomp_Info">Os projetos de recompilação compatíveis serão adicionados conforme os formatos locais de conquistas forem implementados.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Recomp_NotAvailable">Indisponível</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_GameFolder">Pasta do SpartanPort (deixe em branco para usar a instalação registrada no Playnite):</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_SaveFolder">Pasta dos salvamentos que contém trophies.dat (opcional):</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_Description">As conquistas são identificadas a partir dos arquivos locais do SpartanPort.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_Browse">Procurar...</sys:String>
 </ResourceDictionary>
