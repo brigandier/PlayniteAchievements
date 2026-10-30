@@ -77,6 +77,10 @@ namespace PlayniteAchievements.Providers.ReXGlue
                         }
 
                         var data = LoadGame(game, paths, catalog);
+                        if (data == null)
+                        {
+                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
+                        }
                         if (enricher != null)
                         {
                             await enricher.EnrichAsync(
@@ -107,6 +111,10 @@ namespace PlayniteAchievements.Providers.ReXGlue
         {
             var read = ReXGlueAchievementReader.TryReadUnlocks(
                 paths.SavePath, out var unlocked);
+            if (!read && !string.IsNullOrWhiteSpace(paths.SavePath))
+            {
+                return null;
+            }
             var details = new List<AchievementDetail>(catalog.Count);
 
             foreach (var entry in catalog)

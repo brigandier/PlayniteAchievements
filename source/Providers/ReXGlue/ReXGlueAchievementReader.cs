@@ -266,12 +266,22 @@ namespace PlayniteAchievements.Providers.ReXGlue
                     uint? currentId = null;
                     var readingLegacyList = false;
                     var legacy = new StringBuilder();
+                    var recognized = false;
 
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine()?.Trim();
-                        if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
+                        if (string.IsNullOrWhiteSpace(line))
                         {
+                            continue;
+                        }
+                        if (line.StartsWith("#"))
+                        {
+                            if (line.IndexOf("Achievement unlock state",
+                                StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                recognized = true;
+                            }
                             continue;
                         }
 
@@ -282,6 +292,7 @@ namespace PlayniteAchievements.Providers.ReXGlue
                         {
                             currentId = id;
                             unlocks[id] = null;
+                            recognized = true;
                             readingLegacyList = false;
                             continue;
                         }
@@ -317,6 +328,7 @@ namespace PlayniteAchievements.Providers.ReXGlue
                             legacy.Append(value);
                             if (value.Contains("]"))
                             {
+                                recognized = true;
                                 readingLegacyList = false;
                                 foreach (Match entry in Regex.Matches(legacy.ToString(), @"\d+"))
                                 {
@@ -334,9 +346,8 @@ namespace PlayniteAchievements.Providers.ReXGlue
                             }
                         }
                     }
+                    return recognized;
                 }
-
-                return true;
             }
             catch (IOException)
             {

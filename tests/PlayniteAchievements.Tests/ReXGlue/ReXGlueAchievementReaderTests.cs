@@ -152,6 +152,27 @@ namespace PlayniteAchievements.Tests.ReXGlue
         }
 
         [TestMethod]
+        public void RejectsMalformedProgressAndAcceptsEmptyRuntimeSave()
+        {
+            var directory = NewFolder();
+            try
+            {
+                var path = Path.Combine(directory, "584108FF.toml");
+                File.WriteAllText(path, "unrecognized = 123\n");
+                Assert.IsFalse(ReXGlueAchievementReader.TryReadUnlocks(path, out _));
+
+                File.WriteAllText(path,
+                    "# Achievement unlock state - managed by ReXGlue runtime\n\n");
+                Assert.IsTrue(ReXGlueAchievementReader.TryReadUnlocks(path, out var unlocked));
+                Assert.AreEqual(0, unlocked.Count);
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        [TestMethod]
         public void FindsUniqueSavesWithoutGuessingMultipleTitleIds()
         {
             var directory = NewFolder();
