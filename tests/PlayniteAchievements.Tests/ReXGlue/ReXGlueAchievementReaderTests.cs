@@ -18,21 +18,29 @@ namespace PlayniteAchievements.Tests.ReXGlue
                 var catalog = Path.Combine(directory, "achievements.toml");
                 Directory.CreateDirectory(Path.Combine(directory, "icons"));
                 File.WriteAllText(Path.Combine(directory, "icons", "10.png"), "x");
-                File.WriteAllText(catalog,
-                    "# Title ID: 584108FF\n[[achievements]]\nid = 1\n" +
-                    "label = \"Missão \\\"Especial\\\"\"\n" +
-                    "description = \"Vença a fase\"\n" +
-                    "unachieved_description = \"Conquista secreta\"\n" +
-                    "gamerscore = 50\nimage_id = 10\n" +
-                    "icon_path = \"icons/10.png\"\nflags = 0\n" +
-                    "[[achievements]]\nid = 2\nlabel = \"Outra\"\n" +
-                    "gamerscore = 15\nflags = 8\n");
-
+                File.WriteAllText(catalog, string.Join("\n", new[]
+                {
+                    "# Title ID: 584108FF",
+                    "[[achievements]]",
+                    "id = 1",
+                    "label = \"Missão especial\"",
+                    "description = \"Vença a fase\"",
+                    "unachieved_description = \"Conquista secreta\"",
+                    "gamerscore = 50",
+                    "image_id = 10",
+                    "icon_path = \"icons/10.png\"",
+                    "flags = 0",
+                    "[[achievements]]",
+                    "id = 2",
+                    "label = \"Outra\"",
+                    "gamerscore = 15",
+                    "flags = 8"
+                }));
                 Assert.IsTrue(ReXGlueAchievementReader.TryReadCatalog(
                     catalog, out var achievements, out var titleId));
                 Assert.AreEqual("584108FF", titleId);
                 Assert.AreEqual(2, achievements.Count);
-                Assert.AreEqual("Missão \"Especial\"", achievements[0].Name);
+                Assert.AreEqual("Missão especial", achievements[0].Name);
                 Assert.AreEqual(50, achievements[0].Gamerscore);
                 Assert.IsTrue(achievements[0].Hidden);
                 Assert.IsFalse(achievements[1].Hidden);
@@ -51,19 +59,27 @@ namespace PlayniteAchievements.Tests.ReXGlue
             var directory = NewFolder();
             try
             {
-                var path = Path.Combine(directory, "achievements.toml");
-                File.WriteAllText(path,
-                    "# Title ID: 58410A07\n" +
-                    "[[achievements]]\nid = 1\nlabel = \"The Story Begins\"\n" +
-                    "description = \"Finish stage one\"\ngamerscore = 5\n" +
-                    "[achievements.Portuguese]\nlabel = \"A história começa\"\n" +
-                    "description = \"Termine a primeira fase\"\n" +
-                    "[achievements.Japanese]\nlabel = \"別のタイトル\"\n" +
-                    "[[achievements]]\nid = 2\nlabel = \"Next\"\n" +
-                    "description = \"Finish stage two\"\n");
-
+                var catalog = Path.Combine(directory, "achievements.toml");
+                File.WriteAllText(catalog, string.Join("\n", new[]
+                {
+                    "# Title ID: 58410A07",
+                    "[[achievements]]",
+                    "id = 1",
+                    "label = \"The Story Begins\"",
+                    "description = \"Finish stage one\"",
+                    "gamerscore = 5",
+                    "[achievements.Portuguese]",
+                    "label = \"A história começa\"",
+                    "description = \"Termine a primeira fase\"",
+                    "[achievements.Japanese]",
+                    "label = \"別のタイトル\"",
+                    "[[achievements]]",
+                    "id = 2",
+                    "label = \"Next\"",
+                    "description = \"Finish stage two\""
+                }));
                 Assert.IsTrue(ReXGlueAchievementReader.TryReadCatalog(
-                    path, out var achievements, out var titleId));
+                    catalog, out var achievements, out var titleId));
                 Assert.AreEqual("58410A07", titleId);
                 Assert.AreEqual(2, achievements.Count);
                 Assert.AreEqual("A história começa", achievements[0].Name);
@@ -84,13 +100,14 @@ namespace PlayniteAchievements.Tests.ReXGlue
             try
             {
                 var catalog = Path.Combine(directory, "catalog.tsv");
-                File.WriteAllText(catalog,
-                    "A\t21\t0\t30\t502\t1\n" +
-                    "T\t21\ten\tEnglish title\tEnglish description\tHidden\n" +
-                    "T\t21\tpt\tTítulo em português\tDescrição\tOculta\n" +
-                    "A\t22\t1\t10\t503\t0\n" +
-                    "T\t22\ten\tEnglish second\tSecond description\tSecret\n");
-
+                File.WriteAllText(catalog, string.Join("\n", new[]
+                {
+                    "A\t21\t0\t30\t502\t1",
+                    "T\t21\ten\tEnglish title\tEnglish description\tHidden",
+                    "T\t21\tpt\tTítulo em português\tDescrição\tOculta",
+                    "A\t22\t1\t10\t503\t0",
+                    "T\t22\ten\tEnglish second\tSecond description\tSecret"
+                }));
                 Assert.IsTrue(ReXGlueAchievementReader.TryReadCatalog(
                     catalog, out var achievements, out var id));
                 Assert.IsNull(id);
@@ -114,9 +131,8 @@ namespace PlayniteAchievements.Tests.ReXGlue
             {
                 var file = Path.Combine(directory, "584108FF.toml");
                 var date = new DateTime(2026, 10, 30, 12, 30, 0, DateTimeKind.Utc);
-                File.WriteAllText(file,
-                    "[unlocked.21]\nfiletime = " + date.ToFileTimeUtc() +
-                    "\n[unlocked.5]\nfiletime = 0\n");
+                File.WriteAllText(file, "[unlocked.21]\nfiletime = " +
+                    date.ToFileTimeUtc() + "\n[unlocked.5]\nfiletime = 0\n");
                 Assert.IsTrue(ReXGlueAchievementReader.TryReadUnlocks(file, out var unlocked));
                 Assert.AreEqual(2, unlocked.Count);
                 Assert.AreEqual(date, unlocked[21]);
@@ -142,7 +158,7 @@ namespace PlayniteAchievements.Tests.ReXGlue
                 File.WriteAllText(catalog, "[[achievements]]\nid = 1\nlabel = \"One\"\n");
                 Assert.IsFalse(ReXGlueAchievementReader.TryReadUnlocks(
                     Path.Combine(directory, "unknown.toml"), out _));
-                Assert.IsNull(ReXGlueAchievementReader.ResolveIcon(catalog, "..\\outside.png"));
+                Assert.IsNull(ReXGlueAchievementReader.ResolveIcon(catalog, "../outside.png"));
                 Assert.IsNull(ReXGlueAchievementReader.ResolveIcon(catalog, "C:\\outside.png"));
             }
             finally
@@ -160,7 +176,6 @@ namespace PlayniteAchievements.Tests.ReXGlue
                 var path = Path.Combine(directory, "584108FF.toml");
                 File.WriteAllText(path, "unrecognized = 123\n");
                 Assert.IsFalse(ReXGlueAchievementReader.TryReadUnlocks(path, out _));
-
                 File.WriteAllText(path,
                     "# Achievement unlock state - managed by ReXGlue runtime\n\n");
                 Assert.IsTrue(ReXGlueAchievementReader.TryReadUnlocks(path, out var unlocked));
