@@ -77,3 +77,11 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Preservamos os nomes, descrições e ícones locais durante a complementação; utilizamos os nomes originais em inglês como alternativa para associar troféus quando a tradução não corresponder à listagem externa.
 - Registramos strings específicas em inglês e português nos catálogos de localização existentes.
 - Testes de compilação e funcionamento dentro do Playnite permanecem como etapa de validação.
+
+## 30/10/2026 — Localização completa e BETA 0.2
+
+- Concluímos a correspondência das 1.629 chaves do catálogo `en_US.xaml` no `pt_BR.xaml`, com tradução de menus, configurações, filtros, edição, estatísticas, notificações, vitrine e Workshop.
+- Mantivemos nomes próprios, siglas, identificadores técnicos e expressões usuais que não exigem adaptação.
+- Verificamos a ausência de chaves duplicadas, de recursos ausentes e de diferenças nos marcadores de formatação.
+- Atualizamos a versão da extensão para `4.1.1.2` e identificamos o instalador como BETA 0.2.
+- A compilação automatizada não substitui a verificação visual e funcional das telas no Playnite.
