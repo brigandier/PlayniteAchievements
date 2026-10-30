@@ -124,3 +124,7 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Empacotamos uma CLI de extração nativa licenciada sob BSD-3-Clause, baixada do lançamento oficial e validada por SHA256 no GitHub Actions.
 - Atualizamos o manifesto para 4.1.1.4 e o artefato instalável para BETA 04.
 - Nenhum arquivo original dos recompilados é modificado. A validação funcional dentro do Playnite e do SDK com os XEX reais continua necessária.
+
+- Corrigimos a publicação do pacote BETA 04 no workflow: o nome do arquivo no upload permaneceu apontando para a BETA 03, embora a primeira compilação e 20 testes tenham passado.
+- Atualizamos o nome exibido da extensão para Playnite Achievements (Recomps), mantendo o identificador original e os créditos do upstream.
+- Preservamos os créditos dos desenvolvedores nas descrições das oito conquistas adicionais do re:Blue.

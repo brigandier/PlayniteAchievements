@@ -96,6 +96,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: PlayniteAchievements-Recomps-BETA04-Windows
-          path: ${{ runner.temp }}/PlayniteAchievements_ReXGlue_BETA03.pext
+          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA04.pext
           if-no-files-found: error
           retention-days: 30
