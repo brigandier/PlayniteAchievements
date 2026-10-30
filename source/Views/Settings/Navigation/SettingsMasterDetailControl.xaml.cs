@@ -91,6 +91,19 @@ namespace PlayniteAchievements.Views.Settings.Navigation
             set => SetValue(EnableGroupingProperty, value);
         }
 
+        public static readonly DependencyProperty EnableSubgroupingProperty =
+            DependencyProperty.Register(
+                nameof(EnableSubgrouping),
+                typeof(bool),
+                typeof(SettingsMasterDetailControl),
+                new PropertyMetadata(false, OnEnableGroupingChanged));
+
+        public bool EnableSubgrouping
+        {
+            get => (bool)GetValue(EnableSubgroupingProperty);
+            set => SetValue(EnableSubgroupingProperty, value);
+        }
+
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is SettingsMasterDetailControl control)
@@ -121,6 +134,11 @@ namespace PlayniteAchievements.Views.Settings.Navigation
             {
                 _itemsView.GroupDescriptions.Add(
                     new PropertyGroupDescription(nameof(SettingsNavigationItem.GroupName)));
+                if (EnableSubgrouping)
+                {
+                    _itemsView.GroupDescriptions.Add(
+                        new PropertyGroupDescription(nameof(SettingsNavigationItem.SubgroupName)));
+                }
             }
 
             _itemsView.Refresh();
@@ -142,6 +160,7 @@ namespace PlayniteAchievements.Views.Settings.Navigation
             return ContainsSearchText(navigationItem.DisplayName, searchText) ||
                 ContainsSearchText(navigationItem.Key, searchText) ||
                 ContainsSearchText(navigationItem.GroupName, searchText) ||
+                ContainsSearchText(navigationItem.SubgroupName, searchText) ||
                 ContainsSearchText(navigationItem.Subtitle, searchText);
         }
 
