@@ -1815,4 +1815,26 @@ Continue?</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_AutoDetect">Detecção automática ativada</sys:String>
     <sys:String x:Key="LOCPlayAch_Provider_UnleashedRecompiled">Unleashed Recompiled</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Unleashed_Description">Lê os metadados de conquistas do Sonic Unleashed instalado e acompanha o progresso local no arquivo ACH-DATA, sem modificar os arquivos do jogo.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Provider_LocalAchievements">Conquistas Locais</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Introduction">Selecione um jogo da biblioteca e valide seus arquivos locais. Os caminhos configurados têm prioridade sobre a descoberta automática.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Game">Jogo da biblioteca</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Detect">Detectar arquivos do jogo</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Format">Formato do progresso</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Auto">Detecção automática</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Progress">Arquivo de desbloqueios</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Catalog">Catálogo (.toml/.tsv) ou default.xex original; opcional para SpartanPort</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Icons">Diretório de ícones (opcional)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Reblue">Incluir as oito conquistas adicionais do re:Blue</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Monitor">Monitorar automaticamente durante a execução do jogo</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Validate">Validar e visualizar prévia</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Save">Salvar configuração</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Remove">Remover configuração</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Name">Conquista</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Points">Pontos</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Unlocked">Desbloqueada</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Date">Data (UTC)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_NotDetected">Não encontramos uma fonte inequívoca. Selecione os arquivos manualmente.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Validated">{0} conquistas reconhecidas; {1} desbloqueadas.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Saved">Configuração preparada. Confirme as configurações com OK e atualize as conquistas deste jogo.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Removed">Configuração removida desta sessão de configurações. Confirme com OK para voltar à descoberta automática.</sys:String>
 </ResourceDictionary>

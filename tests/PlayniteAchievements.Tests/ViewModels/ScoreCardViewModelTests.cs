@@ -2,6 +2,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PlayniteAchievements.Common;
 using PlayniteAchievements.Models.Achievements;
 using PlayniteAchievements.Models.Achievements.Scoring;
 using PlayniteAchievements.Models.Settings;
@@ -156,7 +157,7 @@ namespace PlayniteAchievements.Tests.ViewModels
             StringAssert.Contains(card.CaptionText, card.PointsUntilNextLevelText);
             StringAssert.Contains(
                 card.PointsUntilNextLevelText,
-                snapshot.PointsUntilNextLevel.ToString("N0"));
+                snapshot.PointsUntilNextLevel.ToString("N0", FormattingCulture.Current));
             StringAssert.Contains(
                 card.PointsUntilNextLevelText,
                 $"Lv {snapshot.DisplayLevel + 1}");
@@ -181,7 +182,7 @@ namespace PlayniteAchievements.Tests.ViewModels
                 card.TooltipNextRankLabel);
             StringAssert.Contains(
                 card.TooltipNextRankValueText,
-                snapshot.PointsUntilNextRank.ToString("N0"));
+                snapshot.PointsUntilNextRank.ToString("N0", FormattingCulture.Current));
         }
 
         [TestMethod]
@@ -208,7 +209,7 @@ namespace PlayniteAchievements.Tests.ViewModels
             Assert.IsTrue(card.HasNextLevel);
             Assert.AreEqual($"Lv {snapshot.DisplayLevel + 1}", card.TooltipNextLevelLabel);
             Assert.AreEqual(
-                snapshot.PointsUntilNextLevel.ToString("N0") + " pts",
+                snapshot.PointsUntilNextLevel.ToString("N0", FormattingCulture.Current) + " pts",
                 card.TooltipNextLevelValueText);
         }
 
@@ -242,7 +243,7 @@ namespace PlayniteAchievements.Tests.ViewModels
             Assert.AreEqual("Bronze IV", card.TierText);
             Assert.AreEqual(760, card.Level);
             Assert.AreEqual("Lv 760", card.LevelText);
-            Assert.AreEqual(score.ToString("N0") + " pts", card.PointsText);
+            Assert.AreEqual(score.ToString("N0", FormattingCulture.Current) + " pts", card.PointsText);
             Assert.AreEqual("10/250", card.TooltipLevelValueText);
             StringAssert.Contains(card.TooltipTitleText, "Mastery 3");
             StringAssert.Contains(card.PointsUntilNextLevelText, "Lv 761");

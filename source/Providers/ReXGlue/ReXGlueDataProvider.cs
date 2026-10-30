@@ -182,6 +182,8 @@ namespace PlayniteAchievements.Providers.ReXGlue
                         icon = embedded;
                     }
                 }
+                icon = icon ?? (ReblueExtraAchievements.IsReblue(paths.GameRoot)
+                    ? ReblueExtraAchievements.FindIcon(entry.Id) : null);
                 details.Add(new AchievementDetail
                 {
                     ApiName = AchievementKey(entry.Id),

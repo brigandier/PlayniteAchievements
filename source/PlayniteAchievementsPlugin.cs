@@ -63,12 +63,12 @@ namespace PlayniteAchievements
 
         private static readonly string[] ProviderDisplayOrder =
         {
-            "Steam", "Epic", "GOG", "BattleNet", "EA", "Ubisoft", "GameJolt", "Riot", "PSN", "Xbox", "Meta", "GooglePlay", "Apple", "FFXIV", "Minecraft", "RetroAchievements", "RPCS3", "ShadPS4", "SpartanPort", "ReXGlue", "UnleashedRecompiled", "Vita3K", "Xenia", "Manual", "Exophase", "Hoyoverse"
+            "Steam", "Epic", "GOG", "BattleNet", "EA", "Ubisoft", "GameJolt", "Riot", "PSN", "Xbox", "Meta", "GooglePlay", "Apple", "FFXIV", "Minecraft", "RetroAchievements", "RPCS3", "ShadPS4", "LocalAchievements", "SpartanPort", "ReXGlue", "UnleashedRecompiled", "Vita3K", "Xenia", "Manual", "Exophase", "Hoyoverse"
         };
 
         private static readonly string[] ProviderRefreshOrder =
         {
-            "ReXGlue", "UnleashedRecompiled", "SpartanPort", "Manual", "FFXIV", "Exophase", "Steam", "Epic", "GOG", "BattleNet", "EA", "Ubisoft", "GameJolt", "Riot", "GW2", "Hypixel", "Minecraft", "Meta", "Hoyoverse", "RPCS3", "ShadPS4", "Vita3K", "PSN", "Xenia", "Xbox", "RetroAchievements"
+            "LocalAchievements", "ReXGlue", "UnleashedRecompiled", "SpartanPort", "Manual", "FFXIV", "Exophase", "Steam", "Epic", "GOG", "BattleNet", "EA", "Ubisoft", "GameJolt", "Riot", "GW2", "Hypixel", "Minecraft", "Meta", "Hoyoverse", "RPCS3", "ShadPS4", "Vita3K", "PSN", "Xenia", "Xbox", "RetroAchievements"
         };
 
         private readonly PlayniteAchievementsSettingsViewModel _settingsViewModel;

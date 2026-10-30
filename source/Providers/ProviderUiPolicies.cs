@@ -50,6 +50,7 @@ namespace PlayniteAchievements.Providers
         private static readonly HashSet<string> RecompProviders =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
+                "LocalAchievements",
                 "SpartanPort",
                 "ReXGlue",
                 "UnleashedRecompiled"

@@ -22,6 +22,8 @@ namespace PlayniteAchievements.Providers.Exophase
         {
             switch ((providerKey ?? string.Empty).Trim().ToUpperInvariant())
             {
+                case "LOCALACHIEVEMENTS":
+                    return ProviderRegistry.Settings<Local.LocalAchievementSettings>().UseExophaseForRarity;
                 case "XBOX":
                     return ProviderRegistry.Settings<XboxSettings>().UseExophaseForRarity;
                 case "XENIA":

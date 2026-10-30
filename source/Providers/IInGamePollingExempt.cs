@@ -1,5 +1,10 @@
 namespace PlayniteAchievements.Providers
 {
+    internal interface IInGameMonitoringPolicy
+    {
+        bool ShouldMonitor(Playnite.SDK.Models.Game game);
+    }
+
     /// <summary>
     /// Marks a provider whose data cannot change while the game is running, so the in-game
     /// monitor does not track its games. Its periodic refreshes would only repeat requests to the

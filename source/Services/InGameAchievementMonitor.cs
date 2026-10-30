@@ -193,7 +193,7 @@ namespace PlayniteAchievements.Services
 
             // Checked before tracking so an exempt game neither runs the auth probe below nor is
             // reported as having no authenticated provider.
-            if (IsPollingExempt(TryResolveProvider(game)))
+            if (IsPollingExempt(TryResolveProvider(game), game))
             {
                 _logger?.Info($"[InGameMonitor] Skipped: provider for '{game.Name}' does not change during play.");
                 return;
@@ -1068,7 +1068,7 @@ namespace PlayniteAchievements.Services
 
             // A reconfigure can move a tracked game onto an exempt provider; returning false
             // stops it there.
-            if (IsPollingExempt(provider))
+            if (IsPollingExempt(provider, state.Game))
             {
                 return false;
             }
@@ -1199,7 +1199,9 @@ namespace PlayniteAchievements.Services
             }
         }
 
-        internal static bool IsPollingExempt(IDataProvider provider) => provider is IInGamePollingExempt;
+        internal static bool IsPollingExempt(IDataProvider provider, Game game = null) =>
+            provider is IInGamePollingExempt ||
+            (provider is IInGameMonitoringPolicy policy && !policy.ShouldMonitor(game));
 
         /// <summary>
         /// The prong set servicing a game. The refresh prong is always present; a fast source, when

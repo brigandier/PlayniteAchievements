@@ -263,90 +263,62 @@ namespace PlayniteAchievements.Providers.ReXGlue
                     FileShare.ReadWrite | FileShare.Delete))
                 using (var reader = new StreamReader(stream, Encoding.UTF8, true))
                 {
+                    var entries = new Dictionary<uint, DateTime?>();
                     uint? currentId = null;
-                    var readingLegacyList = false;
-                    var legacy = new StringBuilder();
+                    var hasTime = false;
                     var recognized = false;
-
+                    var legacy = new StringBuilder();
+                    var readingLegacy = false;
                     while (!reader.EndOfStream)
                     {
-                        var line = reader.ReadLine()?.Trim();
-                        if (string.IsNullOrWhiteSpace(line))
-                        {
-                            continue;
-                        }
-                        if (line.StartsWith("#"))
-                        {
-                            if (line.IndexOf("Achievement unlock state",
-                                StringComparison.OrdinalIgnoreCase) >= 0)
-                            {
-                                recognized = true;
-                            }
-                            continue;
-                        }
-
-                        var section = UnlockSection.Match(line);
-                        if (section.Success &&
-                            uint.TryParse(section.Groups[1].Value, NumberStyles.None,
-                                CultureInfo.InvariantCulture, out var id) && id != 0)
-                        {
-                            currentId = id;
-                            unlocks[id] = null;
+                        var raw = reader.ReadLine() ?? "";
+                        if (raw.TrimStart().StartsWith("# Achievement unlock state", StringComparison.Ordinal))
                             recognized = true;
-                            readingLegacyList = false;
+                        var line = raw.Split('#')[0].Trim();
+                        if (line.Length == 0) continue;
+                        if (readingLegacy || line.StartsWith("unlocked =", StringComparison.Ordinal))
+                        {
+                            if (currentId.HasValue) return false;
+                            legacy.Append(readingLegacy ? line : line.Substring(line.IndexOf('=') + 1));
+                            readingLegacy = !line.Contains("]");
+                            if (readingLegacy) continue;
+                            if (!Regex.IsMatch(legacy.ToString(), @"^\s*\[\s*(?:[1-9]\d*\s*(?:,\s*[1-9]\d*\s*)*,?\s*)?\]\s*$"))
+                                return false;
+                            foreach (Match item in Regex.Matches(legacy.ToString(), @"\d+"))
+                            {
+                                if (!uint.TryParse(item.Value, out var id) || entries.ContainsKey(id)) return false;
+                                entries.Add(id, null);
+                            }
+                            legacy.Clear();
+                            recognized = true;
                             continue;
                         }
-
-                        if (line.StartsWith("[") && line.EndsWith("]") && !line.StartsWith("[unlocked."))
+                        var section = UnlockSection.Match(line);
+                        if (section.Success)
                         {
-                            currentId = null;
+                            if (currentId.HasValue && !hasTime) return false;
+                            if (!uint.TryParse(section.Groups[1].Value, NumberStyles.None,
+                                CultureInfo.InvariantCulture, out var id) || id == 0 || entries.ContainsKey(id)) return false;
+                            currentId = id;
+                            hasTime = false;
+                            entries.Add(id, null);
+                            recognized = true;
                             continue;
                         }
-
-                        if (currentId.HasValue && line.StartsWith("filetime", StringComparison.Ordinal))
+                        var field = Regex.Match(line, @"^filetime\s*=\s*(\d+)\s*$");
+                        if (!currentId.HasValue || hasTime || !field.Success ||
+                            !long.TryParse(field.Groups[1].Value, NumberStyles.None,
+                                CultureInfo.InvariantCulture, out var ticks)) return false;
+                        if (ticks > 0)
                         {
-                            var equals = line.IndexOf('=');
-                            if (equals > 0 && long.TryParse(
-                                line.Substring(equals + 1).Trim(),
-                                NumberStyles.Integer, CultureInfo.InvariantCulture, out var ticks) && ticks > 0)
-                            {
-                                try
-                                {
-                                    unlocks[currentId.Value] = DateTime.FromFileTimeUtc(ticks);
-                                }
-                                catch (ArgumentOutOfRangeException)
-                                {
-                                }
-                            }
-                            continue;
+                            try { entries[currentId.Value] = DateTime.FromFileTimeUtc(ticks); }
+                            catch (ArgumentOutOfRangeException) { return false; }
                         }
-
-                        if (!currentId.HasValue && (readingLegacyList ||
-                            line.StartsWith("unlocked", StringComparison.Ordinal)))
-                        {
-                            var value = readingLegacyList ? line : line.Substring(line.IndexOf('=') + 1);
-                            legacy.Append(value);
-                            if (value.Contains("]"))
-                            {
-                                recognized = true;
-                                readingLegacyList = false;
-                                foreach (Match entry in Regex.Matches(legacy.ToString(), @"\d+"))
-                                {
-                                    if (uint.TryParse(entry.Value, NumberStyles.None,
-                                        CultureInfo.InvariantCulture, out var oldId) && oldId != 0)
-                                    {
-                                        unlocks[oldId] = null;
-                                    }
-                                }
-                                legacy.Clear();
-                            }
-                            else
-                            {
-                                readingLegacyList = true;
-                            }
-                        }
+                        hasTime = true;
                     }
-                    return recognized;
+                    if (!recognized || readingLegacy || (currentId.HasValue && !hasTime)) return false;
+                    unlocks = entries;
+                    return true;
                 }
             }
             catch (IOException)

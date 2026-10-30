@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlayniteAchievements.Services.Capture;
@@ -45,7 +46,7 @@ namespace PlayniteAchievements.Services.Tests.Capture
         {
             return string.Join(" ", plan.Runs.Select(r =>
                 (r.Kind == OverlaySplicePlan.RunKind.Copy ? "copy" : "recode") +
-                "[" + (r.Start / (double)Second).ToString("0.##") + "," + (r.End / (double)Second).ToString("0.##") + ")"));
+                "[" + (r.Start / (double)Second).ToString("0.##", CultureInfo.InvariantCulture) + "," + (r.End / (double)Second).ToString("0.##", CultureInfo.InvariantCulture) + ")"));
         }
 
         private static void AssertAlternates(OverlaySplicePlan plan)

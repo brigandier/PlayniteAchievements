@@ -9,6 +9,39 @@ namespace PlayniteAchievements.Tests.ReXGlue
     [TestClass]
     public sealed class ReXGlueAchievementReaderTests
     {
+        [DataTestMethod]
+        [DataRow("[unlocked.1]\n")]
+        [DataRow("[unlocked.1]\nfiletime = -1\n")]
+        [DataRow("[unlocked.1]\nfiletime = 9223372036854775807\n")]
+        [DataRow("[unlocked.1]\nfiletime = 0\n[unlocked.1]\nfiletime = 0\n")]
+        [DataRow("[unlocked.1]\nfiletime = 0\n[unlocked.broken]\nfiletime = 0\n")]
+        [DataRow("unlocked = [\"achievement 12\"]\n")]
+        [DataRow("unlocked = [1, 2\n")]
+        public void RejectsPartialOrUnprovenUnlocks(string contents)
+        {
+            var path = Path.GetTempFileName();
+            try
+            {
+                File.WriteAllText(path, contents);
+                Assert.IsFalse(ReXGlueAchievementReader.TryReadUnlocks(path, out var unlocks));
+                Assert.AreEqual(0, unlocks.Count);
+            }
+            finally { File.Delete(path); }
+        }
+
+        [TestMethod]
+        public void EmptySdkStateIsAValidLockedSnapshot()
+        {
+            var path = Path.GetTempFileName();
+            try
+            {
+                File.WriteAllText(path, "# Achievement unlock state - managed by ReXGlue runtime\n");
+                Assert.IsTrue(ReXGlueAchievementReader.TryReadUnlocks(path, out var unlocks));
+                Assert.AreEqual(0, unlocks.Count);
+            }
+            finally { File.Delete(path); }
+        }
+
         [TestMethod]
         public void ReadsSdkCatalogIncludingTitleIdAndIcons()
         {

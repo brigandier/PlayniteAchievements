@@ -247,6 +247,9 @@
     <Content Include="Resources\Hoyoverse\**\*.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Reblue\*.png;Resources\Reblue\LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <!-- Bundled unlock sounds ship as loose files: the sound host process opens them by path. -->
     <Content Include="Resources\Sounds\*.mp3;Resources\Sounds\notices.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -268,7 +271,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)Localization\*.xaml" "$(TargetDir)\Localization" /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

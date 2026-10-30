@@ -86,7 +86,7 @@ try {
             if ($dotnet) {
                 Write-Host '[6/7] Executando testes dos Recomps...' -ForegroundColor Cyan
                 $testProject = Join-Path $repo 'tests\PlayniteAchievements.Tests\PlayniteAchievements.Tests.csproj'
-                & $dotnet.Source test $testProject --configuration Release --filter 'FullyQualifiedName~SpartanPort|FullyQualifiedName~ReXGlue|FullyQualifiedName~Unleashed' --logger "trx;LogFileName=spartanport_$stamp.trx"
+                & $dotnet.Source test $testProject --configuration Release --filter 'TestCategory!=LocalInstallation' --logger "trx;LogFileName=spartanport_$stamp.trx"
                 if ($LASTEXITCODE -ne 0) {
                     throw 'Testes dos Recomps falharam. Envie o log; o pacote ainda nao sera gerado.'
                 }
@@ -137,7 +137,7 @@ try {
         }
         Copy-Item -LiteralPath $manifest -Destination $stage -Force
         Copy-Item -LiteralPath $icon -Destination $stage -Force
-        $zip = Join-Path $outputDir "PlayniteAchievements_Recomps_BETA05_$stamp.zip"
+        $zip = Join-Path $outputDir "PlayniteAchievements_Recomps_BETA06_$stamp.zip"
         $pext = [IO.Path]::ChangeExtension($zip, '.pext')
         Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -CompressionLevel Optimal
         Move-Item -LiteralPath $zip -Destination $pext -Force

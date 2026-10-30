@@ -14,6 +14,7 @@ using PlayniteAchievements.Services.Refresh;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,6 +23,32 @@ namespace PlayniteAchievements.Services.Tests
     [TestClass]
     public class TargetSelectionResolverTests
     {
+        [TestMethod]
+        public void LocalConfigurationWinsOverDiscoveryAndLegacyOverrides()
+        {
+            var tempDir = CreateTempDirectory();
+            var previousPlugin = PlayniteAchievementsPlugin.Instance;
+            try
+            {
+                var game = new Game { Id = Guid.NewGuid(), Name = "Configured local game" };
+                var store = new GameCustomDataStore(tempDir);
+                store.Save(game.Id, new GameCustomDataFile { PlayniteGameId = game.Id, XeniaTitleIdOverride = "4D5307E6" });
+                PlayniteAchievementsPlugin.Instance = new PlayniteAchievementsPlugin { GameCustomDataStore = store };
+                var resolver = new TargetSelectionResolver(new FakePlayniteApi(), new PlayniteAchievementsSettings(),
+                    new FakeCacheManager(), null, new[] { "Xenia", "ReXGlue", "LocalAchievements" });
+                var local = new FakeProvider("LocalAchievements", item => item.Id == game.Id);
+                var providers = new IDataProvider[] { new FakeProvider("Xenia", _ => true), new FakeProvider("ReXGlue", _ => true), local };
+                Assert.AreSame(local, resolver.ResolveProviderForGame(game, providers));
+                CollectionAssert.AreEqual(new[] { local }, resolver.GetProvidersWithCapableGames(new[] { game }, providers).ToArray());
+                Assert.AreEqual("Xenia", resolver.ResolveProviderForGame(new Game { Id = Guid.NewGuid() }, providers).ProviderKey);
+            }
+            finally
+            {
+                PlayniteAchievementsPlugin.Instance = previousPlugin;
+                DeleteDirectory(tempDir);
+            }
+        }
+
         [TestMethod]
         public void ResolveProviderForGame_XeniaOverrideForcesXeniaProvider()
         {

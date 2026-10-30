@@ -62,7 +62,9 @@ namespace PlayniteAchievements.Providers.ReXGlue
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = tool,
-                        Arguments = "init achievements " + Quote(xexPath) +
+                        Arguments = "init --project-name achievements --xex-path " +
+                            Quote(xexPath) + " --project-root " + Quote(outDir) +
+                            " achievements " + Quote(xexPath) +
                             " " + Quote(outDir) + " --language 1",
                         WorkingDirectory = Path.GetDirectoryName(tool),
                         CreateNoWindow = true,

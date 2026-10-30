@@ -7,6 +7,14 @@ namespace PlayniteAchievements.Providers.ReXGlue
 {
     internal static class ReblueExtraAchievements
     {
+        internal static string FindIcon(uint id)
+        {
+            if (id < 65537 || id > 65544) return null;
+            var folder = Path.GetDirectoryName(typeof(ReblueExtraAchievements).Assembly.Location);
+            var path = Path.Combine(folder, "Resources", "Reblue", "0x" + id.ToString("X") + ".png");
+            return File.Exists(path) ? path : null;
+        }
+
         internal static bool IsReblue(string root)
         {
             return !string.IsNullOrWhiteSpace(root) &&

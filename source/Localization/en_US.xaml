@@ -1810,4 +1810,26 @@
     <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_AutoDetect">Automatic discovery is enabled</sys:String>
     <sys:String x:Key="LOCPlayAch_Provider_UnleashedRecompiled">Unleashed Recompiled</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_Unleashed_Description">Reads Xbox 360 achievement metadata from the installed Sonic Unleashed game and tracks the local ACH-DATA progress file without changing any game files.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Provider_LocalAchievements">Local Achievements</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Introduction">Select a library game and validate its local files. Saved paths take priority over automatic discovery.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Game">Library game</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Detect">Detect game files</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Format">Progress format</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Auto">Automatic detection</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Progress">Unlock progress file</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Catalog">Catalog (.toml/.tsv) or original default.xex; optional for SpartanPort</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Icons">Icon directory (optional)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Reblue">Include the eight native re:Blue achievements</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Monitor">Monitor automatically while the game is running</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Validate">Validate and preview</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Save">Save configuration</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Remove">Remove configuration</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Name">Achievement</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Points">Points</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Unlocked">Unlocked</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Date">Date (UTC)</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_NotDetected">No unambiguous source found. Select the files manually.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Validated">{0} achievements recognized; {1} unlocked.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Saved">Configuration prepared. Confirm the settings with OK, then refresh this game’s achievements.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Local_Removed">Configuration removed from this settings session. Confirm with OK to restore automatic discovery.</sys:String>
 </ResourceDictionary>

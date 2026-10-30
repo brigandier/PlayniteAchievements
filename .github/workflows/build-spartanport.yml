@@ -28,15 +28,18 @@ jobs:
 
       - name: Restore dependencies
         shell: pwsh
-        run: nuget restore source/PlayniteAchievements.sln -NonInteractive
+        run: |
+          nuget restore source/PlayniteAchievements.sln -NonInteractive
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          dotnet restore tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj
 
       - name: Compile extension
         shell: pwsh
         run: msbuild source/PlayniteAchievements.csproj /p:Configuration=Release /p:Platform=AnyCPU /m:1 /v:normal /bl:spartanport-build.binlog
 
-      - name: Run native trophy reader tests
+      - name: Run local achievement and regression tests
         shell: pwsh
-        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "FullyQualifiedName~SpartanPort|FullyQualifiedName~ReXGlue|FullyQualifiedName~Unleashed" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
+        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "TestCategory!=LocalInstallation" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
 
       - name: Prepare native Xbox 360 metadata extractor
         shell: pwsh
@@ -61,7 +64,7 @@ jobs:
           if (-not (Test-Path (Join-Path $target "rexglue.exe"))) {
             throw "XDBF extractor was not packaged."
           }
-          & (Join-Path $target "rexglue.exe") --help
+          & (Join-Path $target "rexglue.exe") init achievements --help
           if ($LASTEXITCODE -ne 0) { throw "Packaged rexglue CLI could not start." }
 
       - name: Package extension
@@ -76,9 +79,12 @@ jobs:
           Copy-Item (Join-Path $build "*") $stage -Recurse -Force
           Copy-Item source/extension.yaml $stage -Force
           Copy-Item source/icon.png $stage -Force
-          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_Recomps_BETA05.zip"
+          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_Recomps_BETA06.zip"
+          foreach ($required in @('PlayniteAchievements.dll', 'PlayniteAchievementsHelper.exe', 'extension.yaml', 'icon.png', 'Localization/pt_BR.xaml', 'Tools/ReXGlue/rexglue.exe', 'Tools/ReXGlue/LICENSE-rexglue-sdk.txt', 'Resources/Reblue/LICENSE.txt', 'Resources/Reblue/0x10006.png')) {
+            if (-not (Test-Path (Join-Path $stage $required))) { throw "Package entry missing: $required" }
+          }
           Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
-          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA05.pext"
+          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA06.pext"
 
       - name: Upload diagnostics
         if: always()
@@ -95,7 +101,7 @@ jobs:
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: PlayniteAchievements-Recomps-BETA05-Windows
-          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA05.pext
+          name: PlayniteAchievements-Recomps-BETA06-Windows
+          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA06.pext
           if-no-files-found: error
           retention-days: 30

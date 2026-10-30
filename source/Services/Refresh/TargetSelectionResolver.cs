@@ -98,6 +98,10 @@ namespace PlayniteAchievements.Services.Refresh
                 return null;
             }
 
+            var localProvider = providers.FirstOrDefault(provider =>
+                provider?.ProviderKey == "LocalAchievements" && IsProviderCapable(game, provider, targetSelectionCache));
+            if (localProvider != null) return localProvider;
+
             var forcedProvider = ResolveForcedProviderForGame(game, providers);
             if (forcedProvider != null || HasForcedProviderOverride(game.Id))
             {
@@ -198,6 +202,14 @@ namespace PlayniteAchievements.Services.Refresh
 
                 if (game == null)
                 {
+                    continue;
+                }
+
+                var localProvider = candidates.FirstOrDefault(provider =>
+                    provider.ProviderKey == "LocalAchievements" && IsProviderCapable(game, provider, targetSelectionCache));
+                if (localProvider != null)
+                {
+                    markedKeys.Add(localProvider.ProviderKey);
                     continue;
                 }
 
