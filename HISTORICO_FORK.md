@@ -47,3 +47,13 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Adicionamos `compilar_spartanport.ps1` para obter a fork, atualizar `main` sem sobrescrever alterações, restaurar NuGet, localizar MSBuild, compilar Release, executar os testes SpartanPort e montar o pacote `.pext`.
 - Guardamos logs de execução e arquivos binários do MSBuild em `artefatos` para diagnosticar falhas.
 - Não consideramos a compilação validada até obter uma execução bem-sucedida no ambiente Windows.
+
+## 30/10/2026 — Primeira compilação validada
+
+- Corrigimos o workflow para compilar `source/PlayniteAchievements.csproj` antes de executar os testes que carregam a DLL principal.
+- Diagnosticamos a falha anterior no GitHub Actions: os testes não conseguiam localizar `PlayniteAchievements.dll` porque a compilação ainda não havia sido executada.
+- Confirmamos a execução bem-sucedida do GitHub Actions nº 23 (`41112929798`), baseada no commit `2c0f734b`.
+- Compilamos a extensão Release no Windows sem erros de compilação e executamos os oito testes SpartanPort com oito aprovações.
+- Geramos `PlayniteAchievements_SpartanPort_BETA01.pext` como artefato instalável da execução.
+- Validamos a estrutura ZIP do pacote, a presença da DLL, do manifesto, do ícone e do executável auxiliar.
+- Mantemos pendente a validação real no Playnite, a identificação da pasta de dados no computador e os desbloqueios durante a partida.
