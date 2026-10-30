@@ -236,6 +236,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\BrandingIcon.png" />
+    <Content Include="..\LICENSE">
+      <Link>LICENSE</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\HiddenAchIcon.png" />
     <Resource Include="Resources\UnlockedAchIcon.png" />
     <!-- UnlockedAchIcon is needed as a loose file too: HoyoverseDefinitionClient resolves it by path
