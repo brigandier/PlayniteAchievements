@@ -10,6 +10,7 @@ namespace PlayniteAchievements.Providers
         private const string StorefrontGroupResourceKey = "LOCPlayAch_Settings_ProviderGroup_StoresLaunchers";
         private const string ConsoleMobileGroupResourceKey = "LOCPlayAch_Settings_ProviderGroup_ConsoleMobile";
         private const string EmulatorRetroGroupResourceKey = "LOCPlayAch_Settings_ProviderGroup_EmulatorsRetro";
+        private const string RecompGroupResourceKey = "LOCPlayAch_Settings_ProviderGroup_Recomps";
         private const string ManualAggregatorGroupResourceKey = "LOCPlayAch_Settings_ProviderGroup_ManualAggregators";
         private const string OtherGroupResourceKey = "LOCOther";
 
@@ -43,7 +44,12 @@ namespace PlayniteAchievements.Providers
                 "ShadPS4",
                 "Vita3K",
                 "Xenia",
-                "RPCS3",
+                "RPCS3"
+            };
+
+        private static readonly HashSet<string> RecompProviders =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
                 "SpartanPort"
             };
 
@@ -85,6 +91,11 @@ namespace PlayniteAchievements.Providers
                 return ConsoleMobileGroupResourceKey;
             }
 
+            if (RecompProviders.Contains(providerKey))
+            {
+                return RecompGroupResourceKey;
+            }
+
             if (EmulatorRetroProviders.Contains(providerKey))
             {
                 return EmulatorRetroGroupResourceKey;
@@ -96,6 +107,13 @@ namespace PlayniteAchievements.Providers
             }
 
             return OtherGroupResourceKey;
+        }
+
+        public static string GetRecompSystemResourceKey(string providerKey)
+        {
+            return string.Equals(providerKey, "SpartanPort", StringComparison.OrdinalIgnoreCase)
+                ? "LOCPlayAch_Settings_Recomp_PS4"
+                : null;
         }
 
         public static bool TryGetSettingsRedirectProviderKey(string providerKey, out string redirectProviderKey)
