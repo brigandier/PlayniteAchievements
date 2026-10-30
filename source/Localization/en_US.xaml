@@ -1800,4 +1800,7 @@
     <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_SaveFolder">Save folder containing trophies.dat (optional):</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_Description">Achievements are read from SpartanPort's local trophy data.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_Browse">Browse...</sys:String>
+    <sys:String x:Key="LOCPlayAch_Provider_SpartanPort">SpartanPort</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_PathLabel">Local trophy files</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_AutoDetect">Using the game installation path from Playnite</sys:String>
 </ResourceDictionary>

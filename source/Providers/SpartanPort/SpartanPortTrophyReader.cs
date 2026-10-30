@@ -277,6 +277,59 @@ namespace PlayniteAchievements.Providers.SpartanPort
             return result;
         }
 
+        public static IReadOnlyList<Text> LoadEnglish(string userDirectory)
+        {
+            if (string.IsNullOrWhiteSpace(userDirectory))
+            {
+                return null;
+            }
+
+            var path = Path.Combine(userDirectory, "trophy_texts", "en.txt");
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            var result = new Text[SpartanPortTrophyReader.TrophyCount];
+            try
+            {
+                foreach (var line in File.ReadLines(path))
+                {
+                    var separator = line.IndexOf('=');
+                    if (separator <= 0 ||
+                        !int.TryParse(line.Substring(0, separator).Trim(), out var id) ||
+                        id < 0 || id >= result.Length)
+                    {
+                        continue;
+                    }
+
+                    var content = line.Substring(separator + 1).Trim();
+                    var delimiter = content.IndexOf(" | ", StringComparison.Ordinal);
+                    if (delimiter <= 0)
+                    {
+                        continue;
+                    }
+
+                    var name = content.Substring(0, delimiter).Trim();
+                    var description = content.Substring(delimiter + 3).Trim();
+                    if (name.Length > 0 && description.Length > 0)
+                    {
+                        result[id] = new Text { Name = name, Description = description };
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                return null;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return null;
+            }
+
+            return result.All(item => item != null) ? result : null;
+        }
+
         public static string TrophyType(int id)
         {
             if (id == 0) return "platinum";

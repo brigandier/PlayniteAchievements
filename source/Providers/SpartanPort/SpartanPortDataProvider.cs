@@ -4,6 +4,7 @@ using PlayniteAchievements.Models;
 using PlayniteAchievements.Models.Achievements;
 using PlayniteAchievements.Models.Friends;
 using PlayniteAchievements.Providers.Settings;
+using PlayniteAchievements.Providers.Exophase;
 using PlayniteAchievements.Services.Refresh;
 using System;
 using System.Collections.Generic;
@@ -23,18 +24,20 @@ namespace PlayniteAchievements.Providers.SpartanPort
     {
         private readonly ILogger _logger;
         private readonly IPlayniteAPI _api;
+        private readonly PlayniteAchievementsSettings _settings;
         private readonly string _pluginUserDataPath;
 
-        public SpartanPortDataProvider(ILogger logger, IPlayniteAPI api, string pluginUserDataPath)
+        public SpartanPortDataProvider(ILogger logger, IPlayniteAPI api, PlayniteAchievementsSettings settings, string pluginUserDataPath)
         {
             _logger = logger;
             _api = api;
+            _settings = settings;
             _pluginUserDataPath = pluginUserDataPath ?? string.Empty;
         }
 
         public string ProviderName => "SpartanPort";
         public string ProviderKey => "SpartanPort";
-        public string ProviderIconKey => "ProviderIconShadPS4";
+        public string ProviderIconKey => "ProviderIconSpartanPort";
         public string ProviderColorHex => "#356CCB";
         public bool IsAuthenticated => true;
         public ISessionManager AuthSession => null;
@@ -46,34 +49,101 @@ namespace PlayniteAchievements.Providers.SpartanPort
                    SpartanPortPaths.Resolve(game, ProviderSettings, _api) != null;
         }
 
-        public Task<RebuildPayload> RefreshAsync(
+        public async Task<RebuildPayload> RefreshAsync(
             IReadOnlyList<Game> gamesToRefresh,
             Action<Game> onGameStarting,
             Func<Game, GameAchievementData, Task> onGameCompleted,
             CancellationToken cancel)
         {
-            return ProviderRefreshExecutor.RunProviderGamesAsync(
-                gamesToRefresh,
-                onGameStarting,
-                (game, ct) =>
-                {
-                    ct.ThrowIfCancellationRequested();
-                    var paths = SpartanPortPaths.Resolve(game, ProviderSettings, _api);
-                    var result = paths == null
-                        ? ProviderRefreshExecutor.ProviderGameResult.Skipped()
-                        : new ProviderRefreshExecutor.ProviderGameResult
+            ExophaseMetadataEnricher enricher = null;
+            if (ProviderSettings.UseExophaseForRarity && gamesToRefresh?.Count > 0)
+            {
+                enricher = new ExophaseMetadataEnricher(_api, _logger, _settings, _pluginUserDataPath);
+                await enricher.InitializeAsync(cancel).ConfigureAwait(false);
+            }
+
+            try
+            {
+                return await ProviderRefreshExecutor.RunProviderGamesAsync(
+                    gamesToRefresh,
+                    onGameStarting,
+                    async (game, ct) =>
+                    {
+                        ct.ThrowIfCancellationRequested();
+                        var paths = SpartanPortPaths.Resolve(game, ProviderSettings, _api);
+                        if (paths == null)
                         {
-                            Data = LoadGame(game, paths)
-                        };
-                    return Task.FromResult(result);
-                },
-                onGameCompleted,
-                null,
-                (game, error, count) =>
-                    _logger?.Warn(error, $"[SpartanPort] Failed to read trophies for '{game?.Name}'."),
-                null,
-                null,
-                cancel);
+                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
+                        }
+
+                        var data = LoadGame(game, paths);
+                        if (enricher != null)
+                        {
+                            await EnrichRarityAsync(game, data, paths, enricher, ct).ConfigureAwait(false);
+                        }
+
+                        return new ProviderRefreshExecutor.ProviderGameResult { Data = data };
+                    },
+                    onGameCompleted,
+                    null,
+                    (game, error, count) =>
+                        _logger?.Warn(error, $"[SpartanPort] Failed to read trophies for '{game?.Name}'."),
+                    null,
+                    null,
+                    cancel).ConfigureAwait(false);
+            }
+            finally
+            {
+                enricher?.Dispose();
+            }
+        }
+
+        private static async Task EnrichRarityAsync(
+            Game game, GameAchievementData data, SpartanPortPaths paths,
+            ExophaseMetadataEnricher enricher, CancellationToken cancel)
+        {
+            var achievements = data?.Achievements;
+            if (achievements == null || achievements.Count == 0)
+            {
+                return;
+            }
+
+            await enricher.EnrichAsync(
+                game, achievements, "ps4", "PSN", cancel,
+                fields: ExophaseMetadataFields.Rarity).ConfigureAwait(false);
+
+            if (achievements.All(item => item.GlobalPercentUnlocked.HasValue))
+            {
+                return;
+            }
+
+            var english = SpartanPortTrophyMetadata.LoadEnglish(paths.UserDirectory);
+            if (english == null || english.Count != achievements.Count)
+            {
+                return;
+            }
+
+            var source = achievements.Select((item, index) => new AchievementDetail
+            {
+                ApiName = item.ApiName,
+                DisplayName = english[index].Name,
+                Description = english[index].Description,
+                TrophyType = item.TrophyType
+            }).ToList();
+
+            await enricher.EnrichAsync(
+                game, source, "ps4", "PSN", cancel,
+                fields: ExophaseMetadataFields.Rarity).ConfigureAwait(false);
+
+            for (var i = 0; i < source.Count; i++)
+            {
+                if (!achievements[i].GlobalPercentUnlocked.HasValue &&
+                    source[i].GlobalPercentUnlocked.HasValue)
+                {
+                    achievements[i].GlobalPercentUnlocked = source[i].GlobalPercentUnlocked;
+                    achievements[i].Rarity = source[i].Rarity;
+                }
+            }
         }
 
         private GameAchievementData LoadGame(Game game, SpartanPortPaths paths)

@@ -2,6 +2,7 @@ using Playnite.SDK.Models;
 using PlayniteAchievements.Providers.EA;
 using PlayniteAchievements.Providers.RPCS3;
 using PlayniteAchievements.Providers.ShadPS4;
+using PlayniteAchievements.Providers.SpartanPort;
 using PlayniteAchievements.Providers.Vita3K;
 using PlayniteAchievements.Providers.Xbox;
 using PlayniteAchievements.Providers.Xenia;
@@ -30,6 +31,8 @@ namespace PlayniteAchievements.Providers.Exophase
                     return ProviderRegistry.Settings<Rpcs3Settings>().UseExophaseForRarity;
                 case "SHADPS4":
                     return ProviderRegistry.Settings<ShadPS4Settings>().UseExophaseForRarity;
+                case "SPARTANPORT":
+                    return ProviderRegistry.Settings<SpartanPortSettings>().UseExophaseForRarity;
                 case "VITA3K":
                     return ProviderRegistry.Settings<Vita3KSettings>().UseExophaseForRarity;
                 default:
@@ -74,6 +77,7 @@ namespace PlayniteAchievements.Providers.Exophase
                 case "RPCS3":
                 case "SHADPS4":
                 case "VITA3K":
+                case "SPARTANPORT":
                     return normalizedName;
                 default:
                     return null;

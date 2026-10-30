@@ -6,6 +6,7 @@ namespace PlayniteAchievements.Providers.SpartanPort
     {
         private string _gameRoot;
         private string _userDirectory;
+        private bool _useExophaseForRarity;
 
         public override string ProviderKey => "SpartanPort";
 
@@ -19,6 +20,12 @@ namespace PlayniteAchievements.Providers.SpartanPort
         {
             get => _userDirectory;
             set => SetValue(ref _userDirectory, value);
+        }
+
+        public bool UseExophaseForRarity
+        {
+            get => _useExophaseForRarity;
+            set => SetValue(ref _useExophaseForRarity, value);
         }
     }
 }

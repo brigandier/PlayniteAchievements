@@ -131,7 +131,7 @@ namespace PlayniteAchievements.Providers.SpartanPort
             return null;
         }
 
-        private static bool HasPortMarker(string root)
+        internal static bool HasPortMarker(string root)
         {
             return File.Exists(Path.Combine(root, "settings.json")) ||
                    File.Exists(Path.Combine(root, "spartanport.ini")) ||

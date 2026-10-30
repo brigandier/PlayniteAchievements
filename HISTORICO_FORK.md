@@ -66,3 +66,14 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Iniciamos a localização brasileira de `source/Localization/pt_BR.xaml`, com tradução de ações, tabelas, menus, edição de conquistas e configurações de plataformas.
 - Localizamos as configurações específicas do SpartanPort por meio de recursos em inglês e português, removendo explicações desnecessárias da interface.
 - A tradução completa do catálogo de textos e a validação visual permanecem em andamento.
+
+
+## 30/10/2026 — Padronização das configurações do SpartanPort
+
+- Alinhamos a página do SpartanPort ao layout das páginas ShadPS4, RPCS3 e Xenia: cabeçalho, ativação, status de configuração e seções padronizadas.
+- Criamos uma identidade gráfica exclusiva para o provedor, independente dos ícones de emuladores.
+- Passamos a validar os caminhos informados e a mostrar o estado da configuração na interface.
+- Adicionamos a opção de complementar a raridade dos troféus com metadados do Exophase, somente quando ativada e autenticada.
+- Preservamos os nomes, descrições e ícones locais durante a complementação; utilizamos os nomes originais em inglês como alternativa para associar troféus quando a tradução não corresponder à listagem externa.
+- Registramos strings específicas em inglês e português nos catálogos de localização existentes.
+- Testes de compilação e funcionamento dentro do Playnite permanecem como etapa de validação.

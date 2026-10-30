@@ -1602,4 +1602,7 @@ Continue?</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_SaveFolder">Pasta dos salvamentos que contém trophies.dat (opcional):</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_Description">As conquistas são identificadas a partir dos arquivos locais do SpartanPort.</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_Browse">Procurar...</sys:String>
+    <sys:String x:Key="LOCPlayAch_Provider_SpartanPort">SpartanPort</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_PathLabel">Troféus locais</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_AutoDetect">Usando a pasta de instalação do jogo no Playnite</sys:String>
 </ResourceDictionary>
