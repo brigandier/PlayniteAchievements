@@ -1,4 +1,4 @@
-name: Build Playnite Achievements (SpartanPort)
+name: Build Playnite Achievements (Recomps)
 
 on:
   push:
@@ -8,6 +8,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: playnite-achievements-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   windows-build:
