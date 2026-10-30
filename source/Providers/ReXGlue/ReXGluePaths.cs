@@ -107,7 +107,9 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 TitleId = titleId,
                 SavePath = savePath,
                 XexPath = xex,
-                GameRoot = roots.FirstOrDefault()
+                GameRoot = roots.FirstOrDefault(root =>
+                    File.Exists(Path.Combine(root, "profiles", "default", "reblue.toml")))
+                    ?? roots.FirstOrDefault()
             };
         }
 

@@ -130,3 +130,13 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Preservamos os créditos dos desenvolvedores nas descrições das oito conquistas adicionais do re:Blue.
 
 - Alinhamos a compilação local em Windows ao pacote do GitHub Actions, incluindo a CLI XDBF oficial com hash SHA256, testes SpartanPort/ReXGlue/Unleashed e identificação BETA 04; adicionamos o atalho COMPILAR_PLAYNITE_RECOMPS.bat.
+
+## 30/10/2026 — Correção de descoberta e diagnóstico dos três jogos
+
+- A BETA 04 instalou sem erro, mas o usuário não visualizou conquistas em Dante's Inferno, Blue Dragon ou Sonic Unleashed.
+- A investigação encontrou retornos silenciosos em caso de falha de extração do catálogo XDBF, sem indicação do motivo na interface.
+- Implementamos mensagens de diagnóstico por jogo: diretórios, Title ID, existência de saves, sucesso/falha do extrator e contagens de conquistas.
+- O extrator agora captura a saída textual e de erro do processo para o log do Playnite, mantendo um limite de tamanho.
+- Reforçamos a descoberta de executáveis do Playnite, inclusive ações com argumentos, pastas de instalação vazias e perfis do re:Blue.
+- Blue Dragon passa a apresentar suas conquistas adicionais mesmo quando os metadados originais do Xbox 360 não forem extraídos.
+- A confirmação funcional dos catálogos originais depende de testes na instalação Windows, não sendo inferida apenas por testes unitários.

@@ -259,6 +259,37 @@ namespace PlayniteAchievements.Tests.ReXGlue
             Assert.IsTrue(custom.Hidden);
         }
 
+        [TestMethod]
+        public void ParsesGameLaunchCommandsWithoutTreatingArgumentsAsFolders()
+        {
+            Assert.AreEqual(
+                @"D:\Games\Microsoft Games\Blue Dragon\reblue.exe",
+                ReXGluePaths.ExtractExecutablePath(
+                    "\"D:\\Games\\Microsoft Games\\Blue Dragon\\reblue.exe\" --profile default"));
+            Assert.AreEqual(
+                @"C:\Games\Sonic Unleashed\UnleashedRecomp.exe",
+                ReXGluePaths.ExtractExecutablePath(
+                    @"C:\Games\Sonic Unleashed\UnleashedRecomp.exe --console"));
+        }
+
+        [TestMethod]
+        public void FindsXexInCommonRecompGameLayout()
+        {
+            var root = NewFolder();
+            try
+            {
+                var game = Path.Combine(root, "game");
+                Directory.CreateDirectory(game);
+                var xex = Path.Combine(game, "default.xex");
+                File.WriteAllBytes(xex, new byte[] { 1, 2, 3 });
+                Assert.AreEqual(xex, ReXGluePaths.FindXexPath(new[] { root }));
+            }
+            finally
+            {
+                Directory.Delete(root, true);
+            }
+        }
+
         private static string NewFolder()
         {
             var directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));

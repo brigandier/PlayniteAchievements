@@ -76,9 +76,9 @@ jobs:
           Copy-Item (Join-Path $build "*") $stage -Recurse -Force
           Copy-Item source/extension.yaml $stage -Force
           Copy-Item source/icon.png $stage -Force
-          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_Recomps_BETA04.zip"
+          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_Recomps_BETA05.zip"
           Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
-          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA04.pext"
+          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA05.pext"
 
       - name: Upload diagnostics
         if: always()
@@ -95,7 +95,7 @@ jobs:
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: PlayniteAchievements-Recomps-BETA04-Windows
-          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA04.pext
+          name: PlayniteAchievements-Recomps-BETA05-Windows
+          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA05.pext
           if-no-files-found: error
           retention-days: 30
