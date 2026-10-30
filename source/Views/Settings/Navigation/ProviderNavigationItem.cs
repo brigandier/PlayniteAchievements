@@ -22,7 +22,8 @@ namespace PlayniteAchievements.Views.Settings.Navigation
             IProviderSettings settings,
             Func<ProviderSettingsViewBase> settingsViewFactory,
             string redirectProviderKey = null,
-            string subtitle = null)
+            string subtitle = null,
+            string subgroupName = null)
             : base(
                 providerKey,
                 displayName,
@@ -31,7 +32,8 @@ namespace PlayniteAchievements.Views.Settings.Navigation
                 redirectProviderKey,
                 subtitle,
                 providerIconKey: providerIconKey,
-                providerColorHex: providerColorHex)
+                providerColorHex: providerColorHex,
+                subgroupName: subgroupName)
         {
             _settings = settings;
 
