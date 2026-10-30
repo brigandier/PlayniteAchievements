@@ -81,6 +81,10 @@ namespace PlayniteAchievements.Providers.ReXGlue
             }
 
             var savePath = FindSavePath(rootsForSaves, titleId);
+            if (savePath == null && userOverride == null && !string.IsNullOrWhiteSpace(titleId))
+            {
+                savePath = FindSaveInDocuments(documents, titleId);
+            }
             if (!string.IsNullOrWhiteSpace(savePath) && string.IsNullOrWhiteSpace(titleId))
             {
                 titleId = Path.GetFileNameWithoutExtension(savePath).ToUpperInvariant();
@@ -144,6 +148,36 @@ namespace PlayniteAchievements.Providers.ReXGlue
                 {
                 }
             }
+            return null;
+        }
+
+        private static string FindSaveInDocuments(string documents, string titleId)
+        {
+            if (string.IsNullOrWhiteSpace(documents) || !Directory.Exists(documents) ||
+                !Regex.IsMatch(titleId, "^[0-9A-Fa-f]{8}$"))
+            {
+                return null;
+            }
+
+            try
+            {
+                foreach (var folder in Directory.EnumerateDirectories(
+                    documents, "*", SearchOption.TopDirectoryOnly).Take(500))
+                {
+                    var path = Path.Combine(folder, "achievements", titleId + ".toml");
+                    if (File.Exists(path))
+                    {
+                        return path;
+                    }
+                }
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+
             return null;
         }
 
