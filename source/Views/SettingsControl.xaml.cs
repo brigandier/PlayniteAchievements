@@ -325,18 +325,6 @@ namespace PlayniteAchievements.Views
                     "LOCPlayAch_Settings_Recomp_PS3"),
                 subtitle: unavailable,
                 subgroupName: ResourceProvider.GetString("LOCPlayAch_Settings_Recomp_PS3")));
-            ProviderNavigationItems.Add(new ProviderNavigationItem(
-                "RecompXbox360Info",
-                ResourceProvider.GetString("LOCPlayAch_Settings_Recomp_Xbox360"),
-                recompGroup,
-                null,
-                null,
-                null,
-                () => new Providers.SpartanPort.RecompPlatformInfoView(
-                    "LOCPlayAch_Settings_Recomp_Xbox360"),
-                subtitle: unavailable,
-                subgroupName: ResourceProvider.GetString("LOCPlayAch_Settings_Recomp_Xbox360")));
-
             if (selectDefault && SelectedProviderNavigationItem == null && ProviderNavigationItems.Count > 0)
             {
                 SelectedProviderNavigationItem = ProviderNavigationItems[0];

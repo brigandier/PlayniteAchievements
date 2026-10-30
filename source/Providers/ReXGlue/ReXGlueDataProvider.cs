@@ -111,7 +111,8 @@ namespace PlayniteAchievements.Providers.ReXGlue
 
             foreach (var entry in catalog)
             {
-                var wasUnlocked = read && unlocked.TryGetValue(entry.Id, out var when);
+                DateTime? when = null;
+                var wasUnlocked = read && unlocked.TryGetValue(entry.Id, out when);
                 var icon = ReXGlueAchievementReader.ResolveIcon(
                     paths.CatalogPath, entry.IconPath);
                 details.Add(new AchievementDetail

@@ -85,3 +85,16 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Verificamos a ausência de chaves duplicadas, de recursos ausentes e de diferenças nos marcadores de formatação.
 - Atualizamos a versão da extensão para `4.1.1.2` e identificamos o instalador como BETA 0.2.
 - A compilação automatizada não substitui a verificação visual e funcional das telas no Playnite.
+
+## 30/10/2026 — Provedor ReXGlue para recompilações de Xbox 360
+
+- Analisamos o armazenamento compartilhado do SDK ReXGlue: catálogos em `achievements.toml` e desbloqueios em `achievements/<TitleID>.toml`, incluindo datas em FILETIME.
+- Confirmamos o mesmo formato de progresso em Geometry Wars: Retro Evolved 2 e Army of Two, incluindo o catálogo TSV exportado por este último.
+- Adicionamos um leitor reutilizável dos catálogos TOML e TSV e dos salvamentos com seções `[unlocked.<id>]`.
+- Implementamos descoberta delimitada pelas pastas do jogo, instalação portátil, dados de usuário e diretório Documents.
+- Incluímos compatibilidade inicial com o catálogo em cache do Army of Two, preservando a distinção entre perfis.
+- Registramos o novo provedor ReXGlue em Recomps → Xbox 360, com progresso em jogo e opção de complementar raridade pelo Exophase.
+- Adicionamos testes para formatos de catálogo, idiomas, datas, ícones, identidade de título e salvamentos ambíguos.
+- Atualizamos a seleção de testes Windows para cobrir SpartanPort e ReXGlue e identificamos a versão experimental como 4.1.1.3.
+- Os recompilados que não exportam um catálogo legível ainda não são reconhecidos automaticamente; a leitura direta dos recursos XDBF do XEX permanece em estudo.
+- A execução real em jogos e a validação visual da interface ainda precisam ser confirmadas.

@@ -1808,4 +1808,9 @@ Continue?</sys:String>
     <sys:String x:Key="LOCPlayAch_Workshop_Contents_CustomTemplate">Modelo personalizado</sys:String>
     <sys:String x:Key="LOCPlayAch_Workshop_Contents_CustomFrameTemplate">Modelo personalizado de moldura</sys:String>
     <sys:String x:Key="LOCPlayAch_Workshop_Contents_KindStyles">Estilos por tipo</sys:String>
+    <sys:String x:Key="LOCPlayAch_Provider_ReXGlue">ReXGlue</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_DataLabel">Conquistas locais</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_UserFolder">Pasta dos dados do usuário (opcional; deixe em branco para detectar automaticamente):</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_Description">Lê as definições das conquistas do catálogo local e os desbloqueios dos arquivos de salvamento do ReXGlue. Uma pasta personalizada substitui a detecção automática dos salvamentos.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_AutoDetect">Detecção automática ativada</sys:String>
 </ResourceDictionary>

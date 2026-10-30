@@ -3,6 +3,7 @@ using PlayniteAchievements.Providers.EA;
 using PlayniteAchievements.Providers.RPCS3;
 using PlayniteAchievements.Providers.ShadPS4;
 using PlayniteAchievements.Providers.SpartanPort;
+using PlayniteAchievements.Providers.ReXGlue;
 using PlayniteAchievements.Providers.Vita3K;
 using PlayniteAchievements.Providers.Xbox;
 using PlayniteAchievements.Providers.Xenia;
@@ -33,6 +34,8 @@ namespace PlayniteAchievements.Providers.Exophase
                     return ProviderRegistry.Settings<ShadPS4Settings>().UseExophaseForRarity;
                 case "SPARTANPORT":
                     return ProviderRegistry.Settings<SpartanPortSettings>().UseExophaseForRarity;
+                case "REXGLUE":
+                    return ProviderRegistry.Settings<ReXGlueSettings>().UseExophaseForRarity;
                 case "VITA3K":
                     return ProviderRegistry.Settings<Vita3KSettings>().UseExophaseForRarity;
                 default:

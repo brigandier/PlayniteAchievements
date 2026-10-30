@@ -50,7 +50,8 @@ namespace PlayniteAchievements.Providers
         private static readonly HashSet<string> RecompProviders =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
-                "SpartanPort"
+                "SpartanPort",
+                "ReXGlue"
             };
 
         private static readonly HashSet<string> ManualAggregatorProviders =
@@ -111,9 +112,15 @@ namespace PlayniteAchievements.Providers
 
         public static string GetRecompSystemResourceKey(string providerKey)
         {
-            return string.Equals(providerKey, "SpartanPort", StringComparison.OrdinalIgnoreCase)
-                ? "LOCPlayAch_Settings_Recomp_PS4"
-                : null;
+            if (string.Equals(providerKey, "SpartanPort", StringComparison.OrdinalIgnoreCase))
+            {
+                return "LOCPlayAch_Settings_Recomp_PS4";
+            }
+            if (string.Equals(providerKey, "ReXGlue", StringComparison.OrdinalIgnoreCase))
+            {
+                return "LOCPlayAch_Settings_Recomp_Xbox360";
+            }
+            return null;
         }
 
         public static bool TryGetSettingsRedirectProviderKey(string providerKey, out string redirectProviderKey)

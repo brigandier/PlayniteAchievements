@@ -1803,4 +1803,9 @@
     <sys:String x:Key="LOCPlayAch_Provider_SpartanPort">SpartanPort</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_PathLabel">Local trophy files</sys:String>
     <sys:String x:Key="LOCPlayAch_Settings_SpartanPort_AutoDetect">Using the game installation path from Playnite</sys:String>
+    <sys:String x:Key="LOCPlayAch_Provider_ReXGlue">ReXGlue</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_DataLabel">Local achievements</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_UserFolder">Optional user data folder (leave empty for automatic discovery):</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_Description">Reads achievement definitions from the game's local catalog and unlocks from ReXGlue save files. A custom folder overrides automatic save location discovery.</sys:String>
+    <sys:String x:Key="LOCPlayAch_Settings_ReXGlue_AutoDetect">Automatic discovery is enabled</sys:String>
 </ResourceDictionary>
