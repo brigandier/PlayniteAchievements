@@ -22,11 +22,13 @@ namespace PlayniteAchievements.Views.Settings.Navigation
             string subtitle = null,
             string iconGlyph = null,
             string providerIconKey = null,
-            string providerColorHex = null)
+            string providerColorHex = null,
+            string subgroupName = null)
         {
             Key = key;
             DisplayName = displayName;
             GroupName = groupName;
+            SubgroupName = subgroupName;
             _viewFactory = viewFactory;
             RedirectKey = redirectKey;
             Subtitle = subtitle;
@@ -38,6 +40,7 @@ namespace PlayniteAchievements.Views.Settings.Navigation
         public string Key { get; }
         public string DisplayName { get; }
         public string GroupName { get; }
+        public string SubgroupName { get; }
         public string Subtitle { get; }
         public bool HasSubtitle => !string.IsNullOrWhiteSpace(Subtitle);
 
