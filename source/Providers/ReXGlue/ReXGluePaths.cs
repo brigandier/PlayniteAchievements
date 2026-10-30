@@ -112,12 +112,6 @@ namespace PlayniteAchievements.Providers.ReXGlue
                     }
                     if (!string.IsNullOrWhiteSpace(titleId))
                     {
-                        var expected = Path.Combine(achievementDir, titleId + ".toml");
-                        if (File.Exists(expected))
-                        {
-                            return expected;
-                        }
-
                         var match = Directory.EnumerateFiles(achievementDir, "*.toml",
                                 SearchOption.TopDirectoryOnly)
                             .FirstOrDefault(path => string.Equals(
