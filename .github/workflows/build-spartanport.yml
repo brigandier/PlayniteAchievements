@@ -36,7 +36,7 @@ jobs:
 
       - name: Run native trophy reader tests
         shell: pwsh
-        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "FullyQualifiedName~SpartanPort|FullyQualifiedName~ReXGlue" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
+        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter "FullyQualifiedName~SpartanPort|FullyQualifiedName~ReXGlue|FullyQualifiedName~Unleashed" --logger "trx;LogFileName=spartanport-tests.trx" -bl:spartanport-tests.binlog
 
       - name: Package extension
         shell: pwsh

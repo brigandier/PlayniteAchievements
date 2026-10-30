@@ -59,7 +59,9 @@ namespace PlayniteAchievements.Providers.ReXGlue
             {
                 foreach (var root in roots)
                 {
+                    rootsForSaves.Add(Path.Combine(root, "userdata"));
                     rootsForSaves.Add(Path.Combine(root, "user_data"));
+                    rootsForSaves.AddRange(DiscoverProfileRoots(root));
                     rootsForSaves.Add(root);
                 }
 
@@ -145,6 +147,43 @@ namespace PlayniteAchievements.Providers.ReXGlue
             return null;
         }
 
+        internal static List<string> DiscoverProfileRoots(string gameRoot)
+        {
+            var result = new List<string>();
+            if (string.IsNullOrWhiteSpace(gameRoot))
+            {
+                return result;
+            }
+
+            var profiles = Path.Combine(gameRoot, "profiles");
+            var preferred = Path.Combine(profiles, "default");
+            if (Directory.Exists(preferred))
+            {
+                result.Add(preferred);
+                return result;
+            }
+
+            try
+            {
+                if (Directory.Exists(profiles))
+                {
+                    var candidates = Directory.EnumerateDirectories(profiles, "*",
+                        SearchOption.TopDirectoryOnly).Take(2).ToList();
+                    if (candidates.Count == 1)
+                    {
+                        result.Add(candidates[0]);
+                    }
+                }
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+            return result;
+        }
+
         private static string FindSaveInDocuments(string documents, string titleId)
         {
             if (string.IsNullOrWhiteSpace(documents) || !Directory.Exists(documents) ||
@@ -186,7 +225,10 @@ namespace PlayniteAchievements.Providers.ReXGlue
                     Path.Combine(root, "src", "achievements.toml"),
                     Path.Combine(root, "achievements.toml"),
                     Path.Combine(root, "cache", "achievements", "catalog.tsv"),
-                    Path.Combine(root, "user_data", "cache", "achievements", "catalog.tsv")
+                    Path.Combine(root, "user_data", "cache", "achievements", "catalog.tsv"),
+                    Path.Combine(root, "userdata", "cache", "achievements", "catalog.tsv"),
+                    Path.Combine(root, "profiles", "default", "cache", "achievements", "catalog.tsv"),
+                    Path.Combine(root, "profiles", "default", "achievements.toml")
                 };
                 foreach (var file in candidates)
                 {

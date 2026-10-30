@@ -101,3 +101,14 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 
 - Corrigimos a descrição exibida após desbloqueio durante uma partida, preservando o texto original da conquista no cache.
 - Incluímos ReXGlue na geração de identificadores para enriquecimento de raridade com Exophase.
+
+## 30/10/2026 — Preparação da BETA 04 com auditoria dos três recompilados
+
+- Confrontamos o código dos projetos Hell's Gate, re:Blue e Unleashed Recompiled com a auditoria local de suas instalações.
+- Confirmamos Dante's Inferno com o Title ID 454108CF e 13 desbloqueios em userdata/achievements.
+- Confirmamos Blue Dragon com o Title ID 4D5307DF e um desbloqueio adicional do re:Blue (ID 65542), no perfil default.
+- Confirmamos que Sonic Unleashed utiliza ACH-DATA de 816 bytes, versão 1, com assinatura e checksum válidos; nenhum desbloqueio foi registrado no relatório.
+- Corrigimos a descoberta dos diretórios portáteis userdata e dos perfis do re:Blue no provedor ReXGlue, mantendo preferência pelo perfil default e sem selecionar arbitrariamente entre perfis ambíguos.
+- Implementamos um leitor binário independente para ACH-DATA, com validação da assinatura, versão, tamanho, checksum, registros e datas.
+- Adicionamos testes automatizados para os caminhos reais e para o leitor do Unleashed Recompiled.
+- Pendente: obter o catálogo original XDBF dos três jogos com segurança e integrar o novo leitor ao provedor; sem catálogo validado, não publicamos a BETA 04 como concluída.

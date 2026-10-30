@@ -209,6 +209,40 @@ namespace PlayniteAchievements.Tests.ReXGlue
             }
         }
 
+        [TestMethod]
+        public void FindsDantesPortableAndReblueProfileUnlocks()
+        {
+            var directory = NewFolder();
+            try
+            {
+                var dante = Path.Combine(directory, "Dante");
+                var portable = Path.Combine(dante, "userdata");
+                var portableAch = Path.Combine(portable, "achievements");
+                Directory.CreateDirectory(portableAch);
+                var danteFile = Path.Combine(portableAch, "454108CF.toml");
+                File.WriteAllText(danteFile, "[unlocked.25]\nfiletime = 0\n");
+                Assert.AreEqual(danteFile, ReXGluePaths.FindSavePath(
+                    new[] { portable, Path.Combine(dante, "user_data"), dante },
+                    "454108CF"));
+
+                var blue = Path.Combine(directory, "Blue Dragon");
+                var profile = Path.Combine(blue, "profiles", "default");
+                var blueAch = Path.Combine(profile, "achievements");
+                Directory.CreateDirectory(blueAch);
+                var blueFile = Path.Combine(blueAch, "4D5307DF.toml");
+                File.WriteAllText(blueFile, "[unlocked.65542]\nfiletime = 0\n");
+                var detected = ReXGluePaths.DiscoverProfileRoots(blue);
+                Assert.AreEqual(1, detected.Count);
+                Assert.AreEqual(profile, detected[0]);
+                Assert.AreEqual(blueFile,
+                    ReXGluePaths.FindSavePath(detected, "4D5307DF"));
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
         private static string NewFolder()
         {
             var directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
