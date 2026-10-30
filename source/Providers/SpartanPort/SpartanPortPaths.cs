@@ -1,0 +1,138 @@
+using Newtonsoft.Json.Linq;
+using Playnite.SDK;
+using Playnite.SDK.Models;
+using PlayniteAchievements.Common;
+using System;
+using System.IO;
+using System.Text.RegularExpressions;
+
+namespace PlayniteAchievements.Providers.SpartanPort
+{
+    internal sealed class SpartanPortPaths
+    {
+        public string Root { get; private set; }
+        public string UserDirectory { get; private set; }
+        public string TrophyFile => Path.Combine(UserDirectory, "trophies.dat");
+        public string TrophyPackage { get; private set; }
+
+        public static SpartanPortPaths Resolve(Game game, SpartanPortSettings settings, IPlayniteAPI api)
+        {
+            if (!IsGodOfWarThree(game?.Name))
+            {
+                return null;
+            }
+
+            var overrideRoot = Expand(settings?.GameRoot);
+            var installedRoot = Expand(PathExpansion.ExpandGamePath(api, game, game.InstallDirectory));
+            var root = !string.IsNullOrWhiteSpace(overrideRoot) ? overrideRoot : installedRoot;
+            if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
+            {
+                return null;
+            }
+
+            var manifestPath = Path.Combine(root, "settings.json");
+            JObject manifest = null;
+            if (File.Exists(manifestPath))
+            {
+                try
+                {
+                    manifest = JObject.Parse(File.ReadAllText(manifestPath));
+                }
+                catch (IOException)
+                {
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+                catch (Newtonsoft.Json.JsonException)
+                {
+                }
+            }
+
+            var explicitRoot = !string.IsNullOrWhiteSpace(overrideRoot);
+            var nativeMarker = File.Exists(Path.Combine(root, "spartanport.ini")) ||
+                               File.Exists(Path.Combine(root, "user", "trophy_texts.txt")) ||
+                               File.Exists(Path.Combine(root, "launcher", "spartanport_trophies.py")) ||
+                               manifest?.Value<string>("user_dir") != null;
+            if (!explicitRoot && !nativeMarker)
+            {
+                return null;
+            }
+
+            var explicitUser = Expand(settings?.UserDirectory);
+            var manifestUser = ResolveManifestPath(root, manifest, "user_dir");
+            var environmentUser = Expand(Environment.GetEnvironmentVariable("SPARTAN_USER_DIR"));
+            var user = FirstExistingDirectory(explicitUser, manifestUser, environmentUser,
+                Path.Combine(root, "user"));
+            if (string.IsNullOrWhiteSpace(user))
+            {
+                user = explicitUser ?? manifestUser ?? environmentUser ?? Path.Combine(root, "user");
+            }
+
+            var update = ResolveManifestPath(root, manifest, "update_dir");
+            var gameFolder = ResolveManifestPath(root, manifest, "game_dir");
+            var trp = FindPackage(update) ?? FindPackage(gameFolder) ?? FindPackage(root);
+            if (!explicitRoot && !File.Exists(Path.Combine(user, "trophies.dat")) &&
+                string.IsNullOrWhiteSpace(trp) && !nativeMarker)
+            {
+                return null;
+            }
+
+            return new SpartanPortPaths
+            {
+                Root = root,
+                UserDirectory = user,
+                TrophyPackage = trp
+            };
+        }
+
+        private static bool IsGodOfWarThree(string gameName)
+        {
+            return !string.IsNullOrWhiteSpace(gameName) &&
+                Regex.IsMatch(gameName, @"\bgod\s+of\s+war\s*(?:iii|3)\b",
+                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        }
+
+        private static string FindPackage(string folder)
+        {
+            if (string.IsNullOrWhiteSpace(folder))
+            {
+                return null;
+            }
+
+            var path = Path.Combine(folder, "sce_sys", "trophy", "trophy00.trp");
+            return File.Exists(path) ? path : null;
+        }
+
+        private static string ResolveManifestPath(string root, JObject manifest, string key)
+        {
+            var value = manifest?.Value<string>(key);
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return null;
+            }
+
+            var expanded = Expand(value);
+            return Path.IsPathRooted(expanded) ? expanded : Path.GetFullPath(Path.Combine(root, expanded));
+        }
+
+        private static string FirstExistingDirectory(params string[] paths)
+        {
+            foreach (var path in paths)
+            {
+                if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
+                {
+                    return path;
+                }
+            }
+
+            return null;
+        }
+
+        private static string Expand(string path)
+        {
+            return string.IsNullOrWhiteSpace(path) ? null :
+                Environment.ExpandEnvironmentVariables(path.Trim().Trim('"'));
+        }
+    }
+}
