@@ -1,0 +1,59 @@
+name: Build Playnite Achievements (SpartanPort)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-build:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore dependencies
+        shell: pwsh
+        run: nuget restore source/PlayniteAchievements.sln -NonInteractive
+
+      - name: Run native trophy reader tests
+        shell: pwsh
+        run: dotnet test tests/PlayniteAchievements.Tests/PlayniteAchievements.Tests.csproj --configuration Release --no-restore --filter FullyQualifiedName~SpartanPortTrophyReaderTests
+
+      - name: Compile extension
+        shell: pwsh
+        run: msbuild source/PlayniteAchievements.csproj /p:Configuration=Release /p:Platform=AnyCPU /m:1 /v:minimal
+
+      - name: Package extension
+        shell: pwsh
+        run: |
+          $build = Join-Path $PWD "source/bin/Release"
+          if (-not (Test-Path (Join-Path $build "PlayniteAchievements.dll"))) {
+            throw "Release assembly not found."
+          }
+          $stage = Join-Path $env:RUNNER_TEMP "playnite-spartanport"
+          New-Item -ItemType Directory -Force -Path $stage | Out-Null
+          Copy-Item (Join-Path $build "*") $stage -Recurse -Force
+          Copy-Item source/extension.yaml $stage -Force
+          Copy-Item source/icon.png $stage -Force
+          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_SpartanPort_BETA01.zip"
+          Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
+          Rename-Item -Path $zip -NewName "PlayniteAchievements_SpartanPort_BETA01.pext"
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: PlayniteAchievements-SpartanPort-Windows
+          path: ${{ runner.temp }}/PlayniteAchievements_SpartanPort_BETA01.pext
+          if-no-files-found: error
+          retention-days: 30
