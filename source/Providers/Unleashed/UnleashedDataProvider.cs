@@ -45,7 +45,11 @@ namespace PlayniteAchievements.Providers.Unleashed
 
         public bool IsCapable(Game game)
         {
-            return ProviderSettings.IsEnabled && Resolve(game) != null;
+            if (!ProviderSettings.IsEnabled)
+            {
+                return false;
+            }
+            return Resolve(game) != null;
         }
 
         public async Task<RebuildPayload> RefreshAsync(
@@ -73,11 +77,17 @@ namespace PlayniteAchievements.Providers.Unleashed
                             return ProviderRefreshExecutor.ProviderGameResult.Skipped();
                         }
 
+                        _logger?.Info($"[UnleashedRecompiled] '{game.Name}': " +
+                            $"TitleId={paths.TitleId}, save={(File.Exists(paths.SavePath) ? "found" : "missing")}, " +
+                            $"xex={(File.Exists(paths.XexPath) ? "found" : "missing")}.");
+
                         var catalogPath = RecompXdbfExtractor.TryExtract(
                             paths.XexPath, paths.TitleId, _pluginUserDataPath, _logger);
                         if (!ReXGlueAchievementReader.TryReadCatalog(
                                 catalogPath, out var catalog, out _))
                         {
+                            _logger?.Warn("[UnleashedRecompiled] Native Xbox 360 catalog is " +
+                                "unavailable; achievement display was skipped.");
                             return ProviderRefreshExecutor.ProviderGameResult.Skipped();
                         }
 
@@ -137,6 +147,9 @@ namespace PlayniteAchievements.Providers.Unleashed
                     Category = "Xbox 360"
                 };
             }).ToList();
+
+            _logger?.Info($"[UnleashedRecompiled] '{game.Name}': " +
+                $"{rows.Count} native achievements, {rows.Count(row => row.Unlocked)} unlocked.");
 
             return new GameAchievementData
             {
@@ -215,25 +228,31 @@ namespace PlayniteAchievements.Providers.Unleashed
                 return null;
             }
 
-            var install = ExpandGamePath(game, game.InstallDirectory);
-            if (string.IsNullOrWhiteSpace(install) || !Directory.Exists(install))
+            var roots = ReXGluePaths.FindGameRoots(game, _api);
+            if (roots.Count == 0)
             {
+                _logger?.Debug($"[UnleashedRecompiled] '{game.Name}': no Playnite " +
+                    $"installation or executable directory. InstallDirectory='{game.InstallDirectory}'.");
                 return null;
             }
 
-            var candidates = new[] { install, Path.Combine(install, "game") };
-            var xex = candidates.Select(root => Path.Combine(root, "default.xex"))
-                .FirstOrDefault(File.Exists);
+            var xex = ReXGluePaths.FindXexPath(roots);
             if (xex == null)
             {
+                _logger?.Debug($"[UnleashedRecompiled] '{game.Name}': " +
+                    "original default.xex not found under Playnite game paths.");
                 return null;
             }
 
             var appdata = Environment.GetFolderPath(
                 Environment.SpecialFolder.ApplicationData);
-            var save = UnleashedAchievementReader.FindSavePath(install, appdata);
+            var save = roots.Select(root =>
+                UnleashedAchievementReader.FindSavePath(root, appdata))
+                .FirstOrDefault(path => !string.IsNullOrWhiteSpace(path));
             if (string.IsNullOrWhiteSpace(save))
             {
+                _logger?.Debug($"[UnleashedRecompiled] '{game.Name}': " +
+                    "ACH-DATA not found in portable, roaming or mod-save directories.");
                 return null;
             }
 
@@ -251,36 +270,19 @@ namespace PlayniteAchievements.Providers.Unleashed
                     SavePath = save
                 };
             }
-            catch (IOException)
+            catch (IOException ex)
             {
+                _logger?.Warn(ex, "[UnleashedRecompiled] Unable to read Xbox 360 title metadata.");
                 return null;
             }
-            catch (InvalidDataException)
+            catch (InvalidDataException ex)
             {
+                _logger?.Warn(ex, "[UnleashedRecompiled] Xbox 360 executable header is invalid.");
                 return null;
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
-                return null;
-            }
-        }
-
-        private string ExpandGamePath(Game game, string path)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                return null;
-            }
-            try
-            {
-                return Path.GetFullPath(PathExpansion.ExpandGamePath(_api, game, path));
-            }
-            catch (ArgumentException)
-            {
-                return null;
-            }
-            catch (NotSupportedException)
-            {
+                _logger?.Warn(ex, "[UnleashedRecompiled] Access denied while reading game data.");
                 return null;
             }
         }
