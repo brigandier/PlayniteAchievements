@@ -124,7 +124,6 @@ namespace PlayniteAchievements.Providers.Local
             catch (UnauthorizedAccessException) { return false; }
             catch (ArgumentException) { return false; }
             catch (NotSupportedException) { return false; }
-            catch (DecoderFallbackException) { return false; }
             catch (OverflowException) { return false; }
         }
 
