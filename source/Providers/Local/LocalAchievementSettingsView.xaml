@@ -33,6 +33,7 @@
                         <ComboBoxItem Tag="ReXGlue" Content="ReXGlue — TOML"/>
                         <ComboBoxItem Tag="UnleashedRecompiled" Content="Unleashed Recompiled — ACH-DATA"/>
                         <ComboBoxItem Tag="SpartanPort" Content="SpartanPort — trophies.dat"/>
+                        <ComboBoxItem Tag="AchievementJson" Content="JSON — Gears of War 2: Hollow"/>
                     </ComboBox>
                     <TextBlock Text="{DynamicResource LOCPlayAch_Local_Progress}"/>
                     <DockPanel Margin="0,4,0,12">

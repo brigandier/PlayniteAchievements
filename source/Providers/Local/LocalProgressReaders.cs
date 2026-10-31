@@ -25,7 +25,7 @@ namespace PlayniteAchievements.Providers.Local
     {
         internal static readonly IReadOnlyList<ILocalProgressReader> All = new ILocalProgressReader[]
         {
-            new RexReader(), new UnleashedReader(), new SpartanReader()
+            new RexReader(), new UnleashedReader(), new SpartanReader(), new JsonReader()
         };
 
         internal static ILocalProgressReader Resolve(string format, string path)
@@ -73,6 +73,20 @@ namespace PlayniteAchievements.Providers.Local
                 unlocks = values.ToDictionary(pair => (uint)pair.Key, pair => pair.Value);
                 return success;
             }
+        }
+
+        private sealed class JsonReader : ILocalProgressReader
+        {
+            public string Format => HollowAchievementReader.Format;
+            public string FileFormat => "Achievements.json";
+            public string Validation => "JSON com IDs, metadados e estados de desbloqueio";
+            public bool CanRead => true;
+            public bool CanMonitor => true;
+            public bool HasUnlockDates => false;
+            public string Limitations => "As notificações acompanham as alterações gravadas pelo jogo. O formato não contém datas de desbloqueio.";
+            public string AchievementKey(uint id) => $"localjson_{id:D8}";
+            public bool TryRead(string path, out Dictionary<uint, DateTime?> unlocks) =>
+                HollowAchievementReader.TryRead(path, out _, out unlocks, out _);
         }
 
         private sealed class SpartanReader : ILocalProgressReader

@@ -85,7 +85,7 @@ namespace PlayniteAchievements.Providers.Local
 
         private void BrowseProgress_Click(object sender, RoutedEventArgs e)
         {
-            var path = _api.Dialogs.SelectFile("Arquivos de progresso|*.toml;ACH-DATA;trophies.dat|Todos os arquivos|*.*");
+            var path = _api.Dialogs.SelectFile("Arquivos de progresso|*.toml;*.json;ACH-DATA;trophies.dat|Todos os arquivos|*.*");
             if (!string.IsNullOrWhiteSpace(path)) ProgressBox.Text = path;
         }
 

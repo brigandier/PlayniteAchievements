@@ -36,8 +36,17 @@ namespace PlayniteAchievements.Providers.Local
         public bool IsAuthenticated => true;
         public ISessionManager AuthSession => null;
         public IFriendsProvider Friends => null;
-        public bool IsCapable(Game game) => ProviderSettings.IsEnabled && game != null && ProviderSettings.Find(game.Id) != null;
-        public bool ShouldMonitor(Game game) => IsCapable(game) && ProviderSettings.Find(game.Id).Monitor;
+        private LocalAchievementConfiguration ConfigurationFor(Game game)
+        {
+            if (game == null) return null;
+            var configured = ProviderSettings.Find(game.Id);
+            if (configured != null) return configured;
+            return HollowAchievementReader.MatchesGameName(game.Name)
+                ? HollowAchievementReader.Detect(game, _api) : null;
+        }
+
+        public bool IsCapable(Game game) => ProviderSettings.IsEnabled && ConfigurationFor(game) != null;
+        public bool ShouldMonitor(Game game) => ProviderSettings.IsEnabled && ConfigurationFor(game)?.Monitor == true;
 
         public async Task<RebuildPayload> RefreshAsync(IReadOnlyList<Game> gamesToRefresh, Action<Game> onGameStarting,
             Func<Game, GameAchievementData, Task> onGameCompleted, CancellationToken cancel)
@@ -50,7 +59,7 @@ namespace PlayniteAchievements.Providers.Local
                     async (game, ct) =>
                     {
                         ct.ThrowIfCancellationRequested();
-                        var configuration = ProviderSettings.Find(game.Id);
+                        var configuration = ConfigurationFor(game);
                         if (configuration == null) return ProviderRefreshExecutor.ProviderGameResult.Skipped();
                         var data = LocalAchievementLoader.Load(game, configuration, _pluginUserDataPath, _logger);
                         if (enricher != null)
@@ -67,7 +76,7 @@ namespace PlayniteAchievements.Providers.Local
 
         public InGameProgressRegistration TryRegister(Game game, GameAchievementData cachedSchema)
         {
-            var configuration = game == null ? null : ProviderSettings.Find(game.Id);
+            var configuration = ConfigurationFor(game);
             if (!ProviderSettings.IsEnabled || configuration?.Monitor != true ||
                 cachedSchema?.ProviderKey != ProviderKey || cachedSchema.Achievements == null || cachedSchema.Achievements.Count == 0) return null;
             var reader = LocalProgressReaders.Resolve(configuration.Format, configuration.ProgressPath);

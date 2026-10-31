@@ -40,7 +40,19 @@ namespace PlayniteAchievements.Providers.Local
             }
 
             List<ReXGlueAchievement> catalog;
-            if (reader.Format == "SpartanPort" && string.IsNullOrWhiteSpace(catalogPath))
+            if (reader.Format == HollowAchievementReader.Format)
+            {
+                if (!string.IsNullOrWhiteSpace(catalogPath) &&
+                    !string.Equals(Path.GetFullPath(catalogPath), Path.GetFullPath(configuration.ProgressPath),
+                        StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidDataException("Este JSON contém o catálogo e o progresso; selecione o mesmo arquivo ou deixe o catálogo em branco.");
+                if (!HollowAchievementReader.TryRead(configuration.ProgressPath, out catalog, out unlocks, out var jsonTitleId))
+                    throw new InvalidDataException("O JSON de conquistas está incompleto ou é incompatível.");
+                RequireSameTitle(titleId, jsonTitleId);
+                titleId = titleId ?? jsonTitleId;
+                catalogPath = configuration.ProgressPath;
+            }
+            else if (reader.Format == "SpartanPort" && string.IsNullOrWhiteSpace(catalogPath))
             {
                 var texts = SpartanPortTrophyMetadata.Load(Path.GetDirectoryName(configuration.ProgressPath));
                 catalog = texts.Select((text, id) => new ReXGlueAchievement
@@ -131,6 +143,9 @@ namespace PlayniteAchievements.Providers.Local
 
         internal static LocalAchievementConfiguration Detect(Game game, IPlayniteAPI api)
         {
+            var hollow = HollowAchievementReader.Detect(game, api);
+            if (hollow != null) return hollow;
+
             var roots = ReXGluePaths.FindGameRoots(game, api);
             if (roots.Any(root => File.Exists(Path.Combine(root, "UnleashedRecomp.exe"))))
             {

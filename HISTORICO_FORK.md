@@ -170,3 +170,13 @@ O histórico detalhado permanece nos commits do Git, separados por leitor, camin
 - Validamos a execução [41145110774 do GitHub Actions](https://github.com/brigandier/PlayniteAchievements/actions/runs/41145110774), baseada no commit `9cbf116365f3b2363a963380b3b7bcaed5b54efb`: compilação Release sem erros, **5.010 testes aprovados, nenhuma falha e sete testes de codecs ignorados pelo ambiente**, empacotamento e upload concluídos. Publicamos `PlayniteAchievements-Recomps-BETA06-Windows` como artefato dessa execução.
 - Normalizamos os finais de linha do catálogo PT-BR conforme o `.gitattributes` existente, preservando todos os textos e eliminando diferenças locais de conversão CRLF/LF.
 - Registramos como pendentes a validação visual da configuração no Playnite, a apresentação após atualizar os jogos e a exibição efetiva do overlay com sons e imagens durante uma partida. Os testes automatizados verificam a cadeia de dados e a política de emissão; não certificam a renderização do overlay nem a latência entre o desbloqueio em memória e o salvamento do Sonic.
+
+## 30/10/2026 — Gears of War 2: Hollow / BETA 07
+
+- Adicionamos o leitor reutilizável de JSON com definições, pontuações e desbloqueios, sem exigir catálogo XDBF ou executável ReXGlue.
+- Integramos o formato ao provedor Conquistas Locais, ao cache e ao monitoramento existente, com identificação estável por ID e notificações condicionadas à gravação do arquivo.
+- Implementamos descoberta delimitada pela instalação do Hollow, pelo executável GearGame.exe e pelo arquivo GearGame/SaveData/Achievements.json; arquivos JSON genéricos não identificam jogos automaticamente.
+- Permitimos associar manualmente o mesmo JSON como catálogo e progresso, com prévia, validação e seleção do arquivo na interface existente.
+- Rejeitamos JSON incompleto, IDs repetidos, títulos incompatíveis e caminhos inseguros de ícones. Preservamos ausência de datas de desbloqueio e arquivos originais intactos.
+- Ampliamos testes de leitura, integração SQLite, substituição atômica, notificações e identificação de instalação.
+- Identificamos a candidata de validação como BETA 07, versão 4.1.1.7. A confirmação da interface no Playnite e de notificações durante uma partida permanece pendente.

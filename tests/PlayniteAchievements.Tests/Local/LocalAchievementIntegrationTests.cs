@@ -110,6 +110,7 @@ namespace PlayniteAchievements.Tests.Local
         [DataRow("ReXGlue", "454108CF.toml", 1)]
         [DataRow("UnleashedRecompiled", "ACH-DATA", 24)]
         [DataRow("SpartanPort", "trophies.dat", 0)]
+        [DataRow("AchievementJson", "Achievements.json", 1)]
         public async Task FileProviderSqliteWatcherAndNotificationPolicy(string format, string fileName, int firstId)
         {
             var folder = Path.Combine(Path.GetTempPath(), "playach-local-" + Guid.NewGuid().ToString("N"));
@@ -123,7 +124,7 @@ namespace PlayniteAchievements.Tests.Local
                 var catalogPath = Path.Combine(folder, "achievements.toml");
                 var oldDate = DateTime.UtcNow.AddDays(-1);
                 WriteProgress(progressPath, format, firstId, oldDate, false);
-                if (format != "SpartanPort")
+                if (format != "SpartanPort" && format != "AchievementJson")
                     File.WriteAllText(catalogPath, "# Title ID: " + (format == "ReXGlue" ? "454108CF" : "53450812") + "\n" +
                         CatalogEntry(firstId) + CatalogEntry(firstId + 1));
 
@@ -132,7 +133,7 @@ namespace PlayniteAchievements.Tests.Local
                 var providerSettings = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(new
                 {
                     Games = new[] { new { GameId = game.Id, Format = format, ProgressPath = progressPath,
-                        CatalogPath = format == "SpartanPort" ? null : catalogPath, Monitor = true } }
+                        CatalogPath = format == "SpartanPort" || format == "AchievementJson" ? null : catalogPath, Monitor = true } }
                 }), Type("Providers.Local.LocalAchievementSettings"));
                 Call(provider, "ApplySettings", providerSettings);
                 Assert.AreEqual(true, Call(provider, "IsCapable", game));
@@ -222,7 +223,7 @@ namespace PlayniteAchievements.Tests.Local
                 Assert.AreEqual(false, Call(provider, "ShouldMonitor", game));
                 Assert.IsNull(Call(provider, "TryRegister", game, cached));
                 Assert.IsTrue((bool)Call(provider, "IsCapable", game), "Disabling monitoring must preserve manual refresh.");
-                if (format != "SpartanPort")
+                if (format != "SpartanPort" && format != "AchievementJson")
                     Assert.AreEqual(oldDate.ToFileTimeUtc() / 10000000,
                         after.Single(row => row.Value<bool>("Unlocked") && row.Value<string>("DisplayName") == "Achievement " + firstId)
                             .Value<DateTime>("UnlockTimeUtc").ToFileTimeUtc() / 10000000);
@@ -235,6 +236,74 @@ namespace PlayniteAchievements.Tests.Local
             }
         }
 
+        [TestMethod]
+        public void HollowJsonAcceptsValidMetadataAndRejectsCorruptStates()
+        {
+            var folder = Path.Combine(Path.GetTempPath(), "playach-hollow-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(folder);
+            try
+            {
+                var state = Path.Combine(folder, "Achievements.json");
+                var game = new Game("Gears of War 2: Hollow") { Id = Guid.NewGuid() };
+                var settings = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(new
+                {
+                    GameId = game.Id, Format = "AchievementJson", ProgressPath = state,
+                    TitleId = "4D53082D", Monitor = true
+                }), Type("Providers.Local.LocalAchievementConfiguration"));
+                var loader = Type("Providers.Local.LocalAchievementLoader").GetMethod("Load", BindingFlags.Static | BindingFlags.NonPublic);
+                Func<object> load = () => loader.Invoke(null, new[] { game, settings, folder, null });
+                var record = new
+                {
+                    title_id = "4D53082D",
+                    achievements = new[]
+                    {
+                        new { id = 1, name = "Welcome", description = "Complete the first mission.", gamerscore = 10, unlocked = true, hidden = false },
+                        new { id = 2, name = "The Road Ahead", description = "Continue the campaign.", gamerscore = 20, unlocked = false, hidden = true }
+                    }
+                };
+                File.WriteAllText(state, JsonConvert.SerializeObject(record));
+                var entries = JArray.FromObject(Get(load(), "Achievements"));
+                Assert.AreEqual(2, entries.Count);
+                Assert.AreEqual(1, entries.Count(row => row.Value<bool>("Unlocked")));
+                Assert.IsTrue(entries.All(row => row["UnlockTimeUtc"]?.Type == JTokenType.Null));
+                Assert.AreEqual(30, entries.Sum(row => row.Value<int>("Points")));
+
+                File.WriteAllText(state, "{");
+                Assert.IsInstanceOfType<InvalidDataException>(Assert.ThrowsException<TargetInvocationException>(() => load()).InnerException);
+                File.WriteAllText(state, "{\"achievements\":[{\"id\":1,\"name\":\"One\",\"description\":\"a\",\"gamerscore\":10,\"unlocked\":true},{\"id\":1,\"name\":\"Two\",\"description\":\"b\",\"gamerscore\":10,\"unlocked\":false}]}");
+                Assert.IsInstanceOfType<InvalidDataException>(Assert.ThrowsException<TargetInvocationException>(() => load()).InnerException);
+                File.WriteAllText(state, "{\"title_id\":\"11111111\",\"achievements\":[{\"id\":1,\"name\":\"One\",\"description\":\"a\",\"gamerscore\":10,\"unlocked\":true}]}");
+                Assert.IsInstanceOfType<InvalidDataException>(Assert.ThrowsException<TargetInvocationException>(() => load()).InnerException);
+            }
+            finally { Directory.Delete(folder, true); }
+        }
+
+        [TestMethod]
+        public void HollowDiscoveryRequiresMatchingGameAndInstallation()
+        {
+            var parent = Path.Combine(Path.GetTempPath(), "Gears of War 2 Hollow " + Guid.NewGuid().ToString("N"));
+            var save = Path.Combine(parent, "GearGame", "SaveData");
+            var executable = Path.Combine(parent, "Binaries", "GearGame.exe");
+            Directory.CreateDirectory(save);
+            Directory.CreateDirectory(Path.GetDirectoryName(executable));
+            try
+            {
+                File.WriteAllBytes(executable, new byte[] { 77, 90 });
+                WriteProgress(Path.Combine(save, "Achievements.json"), "AchievementJson", 1, DateTime.UtcNow, false);
+                var validGame = new Game("Gears of War 2: Hollow") { Id = Guid.NewGuid(), InstallDirectory = parent };
+                var detect = Type("Providers.Local.HollowAchievementReader").GetMethod("Detect",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                var found = detect.Invoke(null, new object[] { validGame, null });
+                Assert.IsNotNull(found);
+                Assert.AreEqual(Path.Combine(save, "Achievements.json"), Get(found, "ProgressPath"));
+                Assert.AreEqual("4D53082D", Get(found, "TitleId"));
+
+                File.Delete(executable);
+                Assert.IsNull(detect.Invoke(null, new object[] { validGame, null }));
+            }
+            finally { Directory.Delete(parent, true); }
+        }
+
         private static string CatalogEntry(int id) => $"[[achievements]]\nid = {id}\nlabel = \"Achievement {id}\"\ndescription = \"Controlled catalog\"\ngamerscore = 10\n";
 
         private static void WriteProgress(string path, string format, int id, DateTime oldDate, bool addUnlock)
@@ -243,6 +312,18 @@ namespace PlayniteAchievements.Tests.Local
             {
                 File.WriteAllText(path, $"[unlocked.{id}]\nfiletime = {oldDate.ToFileTimeUtc()}\n" +
                     (addUnlock ? $"[unlocked.{id + 1}]\nfiletime = {DateTime.UtcNow.ToFileTimeUtc()}\n" : ""));
+                return;
+            }
+            if (format == "AchievementJson")
+            {
+                File.WriteAllText(path, JsonConvert.SerializeObject(new
+                {
+                    achievements = new[]
+                    {
+                        new { id, name = "Achievement " + id, description = "Controlled catalog", gamerscore = 10, unlocked = true },
+                        new { id = id + 1, name = "Achievement " + (id + 1), description = "Controlled catalog", gamerscore = 10, unlocked = addUnlock }
+                    }
+                }));
                 return;
             }
             if (format == "SpartanPort")
