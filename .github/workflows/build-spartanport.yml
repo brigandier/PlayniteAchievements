@@ -85,7 +85,7 @@ jobs:
             if (-not (Test-Path (Join-Path $stage $required))) { throw "Package entry missing: $required" }
           }
           Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
-          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA06.pext"
+          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA07.pext"
 
       - name: Upload diagnostics
         if: always()
@@ -104,6 +104,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: PlayniteAchievements-Recomps-BETA07-Windows
-          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA06.pext
+          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA07.pext
           if-no-files-found: error
           retention-days: 30
