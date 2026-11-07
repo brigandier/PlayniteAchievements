@@ -151,6 +151,7 @@ namespace PlayniteAchievements.Tests.Local
                 var callbackArguments = callbackType.GetMethod("Invoke").GetParameters().Select(parameter => Expression.Parameter(parameter.ParameterType)).ToArray();
                 Func<object, Task> persist = data =>
                 {
+                    Assert.AreEqual(format == "SpartanPort" ? "ps4" : "xbox-360", Get(Get(data, "MetadataHints"), "PlatformSlug"));
                     Call(currentStore, "SaveCurrentUserGameData", game.Id.ToString(), data);
                     return Task.CompletedTask;
                 };
@@ -159,6 +160,20 @@ namespace PlayniteAchievements.Tests.Local
                 await ((Task)Call(provider, "RefreshAsync", new[] { game }, null, callback, CancellationToken.None));
                 var cached = Call(store, "LoadCurrentUserGameData", game.Id.ToString());
                 Assert.IsNotNull(cached, "The provider must persist a complete catalog through the normal refresh callback.");
+                if (format == "SpartanPort")
+                {
+                    var textsDirectory = Path.Combine(folder, "trophy_texts");
+                    Directory.CreateDirectory(textsDirectory);
+                    File.WriteAllLines(Path.Combine(textsDirectory, "en.txt"), Enumerable.Range(0, 35)
+                        .Select(id => $"{id} = English trophy {id} | Controlled English description").ToArray());
+                    var englishTask = (Task)Type("Providers.IEnglishTitleSource").GetMethod("GetEnglishTitlesAsync")
+                        .Invoke(provider, new[] { game, cached, CancellationToken.None });
+                    await englishTask;
+                    var englishRows = JArray.FromObject(Get(englishTask, "Result"));
+                    Assert.AreEqual(35, englishRows.Count);
+                    Assert.AreEqual("gow3_spartanport_000", englishRows[0].Value<string>("ApiName"));
+                    Assert.AreEqual("English trophy 0", englishRows[0].Value<string>("DisplayName"));
+                }
                 var rows = JArray.FromObject(Get(cached, "Achievements"));
                 Assert.AreEqual(format == "SpartanPort" ? 35 : 2, rows.Count);
                 Assert.AreEqual(1, rows.Count(row => row.Value<bool>("Unlocked")));

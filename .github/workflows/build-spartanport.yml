@@ -80,12 +80,12 @@ jobs:
           Copy-Item (Join-Path $build "*") $stage -Recurse -Force
           Copy-Item source/extension.yaml $stage -Force
           Copy-Item source/icon.png $stage -Force
-          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_Recomps_BETA07.zip"
+          $zip = Join-Path $env:RUNNER_TEMP "PlayniteAchievements_Recomps_BETA08.zip"
           foreach ($required in @('LICENSE', 'PlayniteAchievements.dll', 'PlayniteAchievementsHelper.exe', 'extension.yaml', 'icon.png', 'Localization/pt_BR.xaml', 'Tools/ReXGlue/rexglue.exe', 'Tools/ReXGlue/LICENSE-rexglue-sdk.txt', 'Resources/Reblue/LICENSE.txt', 'Resources/Reblue/0x10006.png')) {
             if (-not (Test-Path (Join-Path $stage $required))) { throw "Package entry missing: $required" }
           }
           Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
-          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA07.pext"
+          Rename-Item -Path $zip -NewName "PlayniteAchievements_Recomps_BETA08.pext"
 
       - name: Upload diagnostics
         if: always()
@@ -103,7 +103,7 @@ jobs:
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: PlayniteAchievements-Recomps-BETA07-Windows
-          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA07.pext
+          name: PlayniteAchievements-Recomps-BETA08-Windows
+          path: ${{ runner.temp }}/PlayniteAchievements_Recomps_BETA08.pext
           if-no-files-found: error
           retention-days: 30

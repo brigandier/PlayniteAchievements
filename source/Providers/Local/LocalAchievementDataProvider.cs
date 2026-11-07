@@ -3,7 +3,6 @@ using Playnite.SDK.Models;
 using PlayniteAchievements.Models;
 using PlayniteAchievements.Models.Achievements;
 using PlayniteAchievements.Models.Friends;
-using PlayniteAchievements.Providers.Exophase;
 using PlayniteAchievements.Providers.Settings;
 using PlayniteAchievements.Services.Refresh;
 using System;
@@ -14,18 +13,16 @@ using System.Threading.Tasks;
 
 namespace PlayniteAchievements.Providers.Local
 {
-    internal sealed class LocalAchievementDataProvider : DataProviderBase<LocalAchievementSettings>, IDataProvider, IInGameProgressSource, IInGameMonitoringPolicy
+    internal sealed class LocalAchievementDataProvider : DataProviderBase<LocalAchievementSettings>, IDataProvider, IInGameProgressSource, IInGameMonitoringPolicy, IEnglishTitleSource
     {
         private readonly IPlayniteAPI _api;
         private readonly ILogger _logger;
-        private readonly PlayniteAchievementsSettings _settings;
         private readonly string _pluginUserDataPath;
 
         public LocalAchievementDataProvider(ILogger logger, IPlayniteAPI api, PlayniteAchievementsSettings settings, string pluginUserDataPath)
         {
             _logger = logger;
             _api = api;
-            _settings = settings;
             _pluginUserDataPath = pluginUserDataPath;
         }
 
@@ -36,6 +33,15 @@ namespace PlayniteAchievements.Providers.Local
         public bool IsAuthenticated => true;
         public ISessionManager AuthSession => null;
         public IFriendsProvider Friends => null;
+
+        Task<IList<AchievementDetail>> IEnglishTitleSource.GetEnglishTitlesAsync(Game game, GameAchievementData data, CancellationToken ct)
+        {
+            ct.ThrowIfCancellationRequested();
+            var configuration = ConfigurationFor(game);
+            return Task.FromResult(configuration?.Format == "SpartanPort"
+                ? LocalEnglishTitles.LoadSpartanPort(System.IO.Path.GetDirectoryName(configuration.ProgressPath), data)
+                : null);
+        }
         private LocalAchievementConfiguration ConfigurationFor(Game game)
         {
             if (game == null) return null;
@@ -51,27 +57,17 @@ namespace PlayniteAchievements.Providers.Local
         public async Task<RebuildPayload> RefreshAsync(IReadOnlyList<Game> gamesToRefresh, Action<Game> onGameStarting,
             Func<Game, GameAchievementData, Task> onGameCompleted, CancellationToken cancel)
         {
-            using (var enricher = ProviderSettings.UseExophaseForRarity
-                ? new ExophaseMetadataEnricher(_api, _logger, _settings, _pluginUserDataPath) : null)
-            {
-                if (enricher != null) await enricher.InitializeAsync(cancel).ConfigureAwait(false);
-                return await ProviderRefreshExecutor.RunProviderGamesAsync(gamesToRefresh, onGameStarting,
-                    async (game, ct) =>
-                    {
-                        ct.ThrowIfCancellationRequested();
-                        var configuration = ConfigurationFor(game);
-                        if (configuration == null) return ProviderRefreshExecutor.ProviderGameResult.Skipped();
-                        var data = LocalAchievementLoader.Load(game, configuration, _pluginUserDataPath, _logger);
-                        if (enricher != null)
-                            await enricher.EnrichAsync(game, data.Achievements,
-                                configuration.Format == "SpartanPort" ? "ps4" : "xbox-360",
-                                configuration.Format == "SpartanPort" ? "PSN" : "Xbox", ct,
-                                fields: ExophaseMetadataFields.Rarity).ConfigureAwait(false);
-                        return new ProviderRefreshExecutor.ProviderGameResult { Data = data };
-                    }, onGameCompleted, null,
-                    (game, error, count) => _logger?.Warn(error, $"[LocalAchievements] Falha ao carregar '{game?.Name}'."),
-                    null, null, cancel).ConfigureAwait(false);
-            }
+            return await ProviderRefreshExecutor.RunProviderGamesAsync(gamesToRefresh, onGameStarting,
+                (game, ct) =>
+                {
+                    ct.ThrowIfCancellationRequested();
+                    var configuration = ConfigurationFor(game);
+                    if (configuration == null) return Task.FromResult(ProviderRefreshExecutor.ProviderGameResult.Skipped());
+                    var data = LocalAchievementLoader.Load(game, configuration, _pluginUserDataPath, _logger);
+                    return Task.FromResult(new ProviderRefreshExecutor.ProviderGameResult { Data = data });
+                }, onGameCompleted, null,
+                (game, error, count) => _logger?.Warn(error, $"[LocalAchievements] Falha ao carregar '{game?.Name}'."),
+                null, null, cancel).ConfigureAwait(false);
         }
 
         public InGameProgressRegistration TryRegister(Game game, GameAchievementData cachedSchema)

@@ -9,7 +9,6 @@ namespace PlayniteAchievements.Providers.Local
     {
         public override string ProviderKey => "LocalAchievements";
         public List<LocalAchievementConfiguration> Games { get; set; } = new List<LocalAchievementConfiguration>();
-        public bool UseExophaseForRarity { get; set; }
 
         public LocalAchievementConfiguration Find(Guid gameId) =>
             Games?.FirstOrDefault(item => item.GameId == gameId);

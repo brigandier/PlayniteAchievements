@@ -137,7 +137,7 @@ try {
         }
         Copy-Item -LiteralPath $manifest -Destination $stage -Force
         Copy-Item -LiteralPath $icon -Destination $stage -Force
-        $zip = Join-Path $outputDir "PlayniteAchievements_Recomps_BETA07_$stamp.zip"
+        $zip = Join-Path $outputDir "PlayniteAchievements_Recomps_BETA08_$stamp.zip"
         $pext = [IO.Path]::ChangeExtension($zip, '.pext')
         Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -CompressionLevel Optimal
         Move-Item -LiteralPath $zip -Destination $pext -Force

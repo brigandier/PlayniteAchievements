@@ -12,7 +12,7 @@ namespace PlayniteAchievements.Providers
         private const string EmulatorRetroGroupResourceKey = "LOCPlayAch_Settings_ProviderGroup_EmulatorsRetro";
         private const string RecompGroupResourceKey = "LOCPlayAch_Settings_ProviderGroup_Recomps";
         private const string ManualAggregatorGroupResourceKey = "LOCPlayAch_Settings_ProviderGroup_ManualAggregators";
-        private const string OtherGroupResourceKey = "LOCOther";
+        private const string OtherGroupResourceKey = "LOCPlayAch_Common_Other";
 
         private static readonly HashSet<string> StorefrontProviders =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)

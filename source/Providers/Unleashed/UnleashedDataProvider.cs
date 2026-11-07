@@ -4,7 +4,6 @@ using PlayniteAchievements.Common;
 using PlayniteAchievements.Models;
 using PlayniteAchievements.Models.Achievements;
 using PlayniteAchievements.Models.Friends;
-using PlayniteAchievements.Providers.Exophase;
 using PlayniteAchievements.Providers.ReXGlue;
 using PlayniteAchievements.Providers.Settings;
 using PlayniteAchievements.Providers.Xenia;
@@ -23,7 +22,6 @@ namespace PlayniteAchievements.Providers.Unleashed
     {
         private readonly ILogger _logger;
         private readonly IPlayniteAPI _api;
-        private readonly PlayniteAchievementsSettings _settings;
         private readonly string _pluginUserDataPath;
 
         public UnleashedDataProvider(ILogger logger, IPlayniteAPI api,
@@ -31,7 +29,6 @@ namespace PlayniteAchievements.Providers.Unleashed
         {
             _logger = logger;
             _api = api;
-            _settings = settings;
             _pluginUserDataPath = pluginUserDataPath;
         }
 
@@ -56,64 +53,43 @@ namespace PlayniteAchievements.Providers.Unleashed
             IReadOnlyList<Game> gamesToRefresh, Action<Game> onGameStarting,
             Func<Game, GameAchievementData, Task> onGameCompleted, CancellationToken cancel)
         {
-            ExophaseMetadataEnricher enricher = null;
-            if (ProviderSettings.UseExophaseForRarity && gamesToRefresh?.Count > 0)
-            {
-                enricher = new ExophaseMetadataEnricher(
-                    _api, _logger, _settings, _pluginUserDataPath);
-                await enricher.InitializeAsync(cancel).ConfigureAwait(false);
-            }
-
-            try
-            {
-                return await ProviderRefreshExecutor.RunProviderGamesAsync(
-                    gamesToRefresh, onGameStarting,
-                    async (game, ct) =>
+            return await ProviderRefreshExecutor.RunProviderGamesAsync(
+                gamesToRefresh, onGameStarting,
+                (game, ct) =>
+                {
+                    ct.ThrowIfCancellationRequested();
+                    var paths = Resolve(game);
+                    if (paths == null)
                     {
-                        ct.ThrowIfCancellationRequested();
-                        var paths = Resolve(game);
-                        if (paths == null)
-                        {
-                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
-                        }
+                        return Task.FromResult(ProviderRefreshExecutor.ProviderGameResult.Skipped());
+                    }
 
-                        _logger?.Info($"[UnleashedRecompiled] '{game.Name}': " +
-                            $"TitleId={paths.TitleId}, save={(File.Exists(paths.SavePath) ? "found" : "missing")}, " +
-                            $"xex={(File.Exists(paths.XexPath) ? "found" : "missing")}.");
+                    _logger?.Info($"[UnleashedRecompiled] '{game.Name}': " +
+                        $"TitleId={paths.TitleId}, save={(File.Exists(paths.SavePath) ? "found" : "missing")}, " +
+                        $"xex={(File.Exists(paths.XexPath) ? "found" : "missing")}.");
 
-                        var catalogPath = RecompXdbfExtractor.TryExtract(
-                            paths.XexPath, paths.TitleId, _pluginUserDataPath, _logger);
-                        if (!ReXGlueAchievementReader.TryReadCatalog(
-                                catalogPath, out var catalog, out _))
-                        {
-                            _logger?.Warn("[UnleashedRecompiled] Native Xbox 360 catalog is " +
-                                "unavailable; achievement display was skipped.");
-                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
-                        }
+                    var catalogPath = RecompXdbfExtractor.TryExtract(
+                        paths.XexPath, paths.TitleId, _pluginUserDataPath, _logger);
+                    if (!ReXGlueAchievementReader.TryReadCatalog(
+                            catalogPath, out var catalog, out _))
+                    {
+                        _logger?.Warn("[UnleashedRecompiled] Native Xbox 360 catalog is " +
+                            "unavailable; achievement display was skipped.");
+                        return Task.FromResult(ProviderRefreshExecutor.ProviderGameResult.Skipped());
+                    }
 
-                        var data = LoadGame(game, paths, catalogPath, catalog);
-                        if (data == null)
-                        {
-                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
-                        }
-                        if (enricher != null)
-                        {
-                            await enricher.EnrichAsync(
-                                game, data.Achievements, "xbox-360", "Xbox", ct,
-                                fields: ExophaseMetadataFields.Rarity).ConfigureAwait(false);
-                        }
-                        return new ProviderRefreshExecutor.ProviderGameResult { Data = data };
-                    },
-                    onGameCompleted, null,
-                    (game, error, count) =>
-                        _logger?.Warn(error,
-                            $"[UnleashedRecompiled] Failed to read achievements for '{game?.Name}'."),
-                    null, null, cancel).ConfigureAwait(false);
-            }
-            finally
-            {
-                enricher?.Dispose();
-            }
+                    var data = LoadGame(game, paths, catalogPath, catalog);
+                    if (data == null)
+                    {
+                        return Task.FromResult(ProviderRefreshExecutor.ProviderGameResult.Skipped());
+                    }
+                    return Task.FromResult(new ProviderRefreshExecutor.ProviderGameResult { Data = data });
+                },
+                onGameCompleted, null,
+                (game, error, count) =>
+                    _logger?.Warn(error,
+                        $"[UnleashedRecompiled] Failed to read achievements for '{game?.Name}'."),
+                null, null, cancel).ConfigureAwait(false);
         }
 
         private GameAchievementData LoadGame(
@@ -155,6 +131,7 @@ namespace PlayniteAchievements.Providers.Unleashed
             {
                 PlayniteGameId = game.Id,
                 ProviderKey = ProviderKey,
+                MetadataHints = new MetadataHints { PlatformSlug = "xbox-360" },
                 ProviderGameKey = "unleashed:" + paths.TitleId,
                 LibrarySourceName = game.Source?.Name,
                 GameName = game.Name,

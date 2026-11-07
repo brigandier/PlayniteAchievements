@@ -96,6 +96,7 @@ namespace PlayniteAchievements.Providers.Local
             {
                 PlayniteGameId = game.Id,
                 ProviderKey = "LocalAchievements",
+                MetadataHints = new MetadataHints { PlatformSlug = reader.Format == "SpartanPort" ? "ps4" : "xbox-360" },
                 ProviderGameKey = reader.Format + ":" + (titleId ?? game.Id.ToString()),
                 LibrarySourceName = game.Source?.Name,
                 GameName = game.Name,

@@ -77,11 +77,7 @@
                     </DataGrid>
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource SectionBorderStyle}" IsEnabled="{Binding Settings.IsEnabled}">
-                <controls:SettingRow Label="{DynamicResource LOCPlayAch_Settings_UseExophaseForMetadata}" Hint="{DynamicResource LOCPlayAch_Settings_UseExophaseForMetadata_Help}" Margin="0">
-                    <CheckBox IsChecked="{Binding Settings.UseExophaseForRarity, Mode=TwoWay}"/>
-                </controls:SettingRow>
-            </Border>
+            <TextBlock Text="{DynamicResource LOCPlayAch_Local_MetadataSettings}" TextWrapping="Wrap" Style="{StaticResource MutedTextStyle}"/>
         </StackPanel>
     </ScrollViewer>
 </settings:ProviderSettingsViewBase>

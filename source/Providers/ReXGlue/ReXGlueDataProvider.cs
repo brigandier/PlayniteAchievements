@@ -3,7 +3,6 @@ using Playnite.SDK.Models;
 using PlayniteAchievements.Models;
 using PlayniteAchievements.Models.Achievements;
 using PlayniteAchievements.Models.Friends;
-using PlayniteAchievements.Providers.Exophase;
 using PlayniteAchievements.Providers.Settings;
 using PlayniteAchievements.Services.Refresh;
 using System;
@@ -20,7 +19,6 @@ namespace PlayniteAchievements.Providers.ReXGlue
     {
         private readonly ILogger _logger;
         private readonly IPlayniteAPI _api;
-        private readonly PlayniteAchievementsSettings _settings;
         private readonly string _pluginUserDataPath;
 
         public ReXGlueDataProvider(
@@ -29,7 +27,6 @@ namespace PlayniteAchievements.Providers.ReXGlue
         {
             _logger = logger;
             _api = api;
-            _settings = settings;
             _pluginUserDataPath = pluginUserDataPath;
         }
 
@@ -70,84 +67,63 @@ namespace PlayniteAchievements.Providers.ReXGlue
             Func<Game, GameAchievementData, Task> onGameCompleted,
             CancellationToken cancel)
         {
-            ExophaseMetadataEnricher enricher = null;
-            if (ProviderSettings.UseExophaseForRarity && gamesToRefresh?.Count > 0)
-            {
-                enricher = new ExophaseMetadataEnricher(
-                    _api, _logger, _settings, _pluginUserDataPath);
-                await enricher.InitializeAsync(cancel).ConfigureAwait(false);
-            }
-
-            try
-            {
-                return await ProviderRefreshExecutor.RunProviderGamesAsync(
-                    gamesToRefresh,
-                    onGameStarting,
-                    async (game, ct) =>
+            return await ProviderRefreshExecutor.RunProviderGamesAsync(
+                gamesToRefresh,
+                onGameStarting,
+                (game, ct) =>
+                {
+                    ct.ThrowIfCancellationRequested();
+                    var paths = ReXGluePaths.Resolve(game, ProviderSettings, _api);
+                    if (paths == null)
                     {
-                        ct.ThrowIfCancellationRequested();
-                        var paths = ReXGluePaths.Resolve(game, ProviderSettings, _api);
-                        if (paths == null)
-                        {
-                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
-                        }
+                        return Task.FromResult(ProviderRefreshExecutor.ProviderGameResult.Skipped());
+                    }
 
-                        _logger?.Info($"[ReXGlue] '{game.Name}': TitleId={paths.TitleId ?? "unknown"}, " +
-                            $"save={(File.Exists(paths.SavePath) ? "found" : "missing")}, " +
-                            $"catalog={(File.Exists(paths.CatalogPath) ? "found" : "missing")}, " +
-                            $"xex={(File.Exists(paths.XexPath) ? "found" : "missing")}.");
+                    _logger?.Info($"[ReXGlue] '{game.Name}': TitleId={paths.TitleId ?? "unknown"}, " +
+                        $"save={(File.Exists(paths.SavePath) ? "found" : "missing")}, " +
+                        $"catalog={(File.Exists(paths.CatalogPath) ? "found" : "missing")}, " +
+                        $"xex={(File.Exists(paths.XexPath) ? "found" : "missing")}.");
 
-                        var catalogPath = paths.CatalogPath ??
-                            RecompXdbfExtractor.TryExtract(paths.XexPath, paths.TitleId,
-                                _pluginUserDataPath, _logger);
+                    var catalogPath = paths.CatalogPath ??
+                        RecompXdbfExtractor.TryExtract(paths.XexPath, paths.TitleId,
+                            _pluginUserDataPath, _logger);
 
-                        var catalogRead = ReXGlueAchievementReader.TryReadCatalog(
-                            catalogPath, out var catalog, out _);
-                        var isReblue = ReblueExtraAchievements.IsReblue(paths.GameRoot);
-                        if (isReblue)
+                    var catalogRead = ReXGlueAchievementReader.TryReadCatalog(
+                        catalogPath, out var catalog, out _);
+                    var isReblue = ReblueExtraAchievements.IsReblue(paths.GameRoot);
+                    if (isReblue)
+                    {
+                        ReblueExtraAchievements.AppendTo(catalog);
+                        if (!catalogRead)
                         {
-                            ReblueExtraAchievements.AppendTo(catalog);
-                            if (!catalogRead)
-                            {
-                                _logger?.Warn($"[ReXGlue] '{game.Name}': original Xbox 360 " +
-                                    "catalog unavailable; showing native re:Blue extras only.");
-                            }
+                            _logger?.Warn($"[ReXGlue] '{game.Name}': original Xbox 360 " +
+                                "catalog unavailable; showing native re:Blue extras only.");
                         }
-                        if (catalog.Count == 0)
-                        {
-                            _logger?.Warn($"[ReXGlue] '{game.Name}': XDBF catalog missing or " +
-                                "unreadable. Check the [Recomps] messages in Playnite.log.");
-                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
-                        }
+                    }
+                    if (catalog.Count == 0)
+                    {
+                        _logger?.Warn($"[ReXGlue] '{game.Name}': XDBF catalog missing or " +
+                            "unreadable. Check the [Recomps] messages in Playnite.log.");
+                        return Task.FromResult(ProviderRefreshExecutor.ProviderGameResult.Skipped());
+                    }
 
-                        var data = LoadGame(game, paths, catalog, catalogPath);
-                        if (data == null)
-                        {
-                            return ProviderRefreshExecutor.ProviderGameResult.Skipped();
-                        }
-                        if (enricher != null)
-                        {
-                            await enricher.EnrichAsync(
-                                game, data.Achievements, "xbox-360", "Xbox", ct,
-                                fields: ExophaseMetadataFields.Rarity).ConfigureAwait(false);
-                        }
+                    var data = LoadGame(game, paths, catalog, catalogPath);
+                    if (data == null)
+                    {
+                        return Task.FromResult(ProviderRefreshExecutor.ProviderGameResult.Skipped());
+                    }
 
-                        return new ProviderRefreshExecutor.ProviderGameResult
-                        {
-                            Data = data
-                        };
-                    },
-                    onGameCompleted,
-                    null,
-                    (game, error, count) =>
-                        _logger?.Warn(error,
-                            $"[ReXGlue] Failed to refresh local achievements for '{game?.Name}'."),
-                    null, null, cancel).ConfigureAwait(false);
-            }
-            finally
-            {
-                enricher?.Dispose();
-            }
+                    return Task.FromResult(new ProviderRefreshExecutor.ProviderGameResult
+                    {
+                        Data = data
+                    });
+                },
+                onGameCompleted,
+                null,
+                (game, error, count) =>
+                    _logger?.Warn(error,
+                        $"[ReXGlue] Failed to refresh local achievements for '{game?.Name}'."),
+                null, null, cancel).ConfigureAwait(false);
         }
 
         private GameAchievementData LoadGame(
@@ -202,6 +178,7 @@ namespace PlayniteAchievements.Providers.ReXGlue
             {
                 PlayniteGameId = game.Id,
                 ProviderKey = ProviderKey,
+                MetadataHints = new MetadataHints { PlatformSlug = "xbox-360" },
                 ProviderGameKey = "rexglue:" + (paths.TitleId ??
                     Path.GetFileNameWithoutExtension(catalogPath)),
                 LibrarySourceName = game.Source?.Name,
